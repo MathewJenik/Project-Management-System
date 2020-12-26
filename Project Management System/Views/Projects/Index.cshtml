@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Project_Management_System.Data.Project>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+@{
+
+    if (User.IsInRole("User"))
+    {
+        <a asp-action="Create">Create a new project</a>
+        
+        <h1>Projects</h1>
+        foreach (var p in Model)
+        {
+
+            <a asp-action="ProjectView"><h5>Project: @p.Name</h5></a>
+        }
+    }
+    else
+    {
+        <h1>Please Log In To View or Create New Projects.</h1>
+    }
+}
