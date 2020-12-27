@@ -157,5 +157,35 @@ namespace Project_Management_System.Controllers
         public ActionResult PleaseLoginToView() {
             return View();
         }
+
+
+
+        // Creates the task within the selected project.
+        public ActionResult CreateTask(int projectID, string name, string description) {
+
+            ProjTask projTask = new ProjTask();
+            
+            projTask.Name = name;
+            projTask.Description = description;
+            projTask.Status = _context.taskStatuses.First(s => s.Name == "Incomplete");
+
+            //Add the newly created projTask to the database
+            _context.projTasks.Add(projTask);
+
+            //Add the projTask to the project within the database
+            _context.projects.First(p => p.ID == projectID).Tasks.Add(projTask);
+
+            _context.SaveChangesAsync();
+            
+            return View();
+
+        }
+
+        // Add SubTasks to a ProjTask
+        public ActionResult CreateSubtask() {
+            return View();
+        }
+
+        
     }
 }

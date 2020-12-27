@@ -1,16 +1,13 @@
-﻿Create project management page, showing a list of all projects.
+﻿---Create project management page, showing a list of all projects.
 
-create a single project page, where details of a project and its tasks are shown
+---create a single project page, where details of a project and its tasks are shown
 create a navigation on the side for different sectino
-
-
-
 
 //
 
-Implement UnnauthorizedAccess ActionResult and View
+---Implement UnnauthorizedAccess ActionResult and View
 
-implement PleaseLoginToView ActionResult and View
+---implement PleaseLoginToView ActionResult and View
 
 
 
@@ -18,3 +15,6 @@ implement PleaseLoginToView ActionResult and View
 
 add the ability to have multiple user accounts being able to view a project, as well as being open to the public.
 
+//
+
+Implement the ability to create a new sub task for a task

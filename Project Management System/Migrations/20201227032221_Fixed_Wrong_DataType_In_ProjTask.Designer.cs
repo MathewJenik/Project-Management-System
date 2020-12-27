@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Project_Management_System.Data;
@@ -9,9 +10,10 @@ using Project_Management_System.Data;
 namespace Project_Management_System.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201227032221_Fixed_Wrong_DataType_In_ProjTask")]
+    partial class Fixed_Wrong_DataType_In_ProjTask
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -224,21 +226,13 @@ namespace Project_Management_System.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
                     b.Property<string>("Name")
                         .HasColumnType("text");
-
-                    b.Property<int?>("ProjectID")
-                        .HasColumnType("integer");
 
                     b.Property<int?>("StatusID")
                         .HasColumnType("integer");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("ProjectID");
 
                     b.HasIndex("StatusID");
 
@@ -255,40 +249,17 @@ namespace Project_Management_System.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<int?>("TasksID")
+                        .HasColumnType("integer");
+
                     b.Property<string>("UserID")
                         .HasColumnType("text");
 
                     b.HasKey("ID");
 
+                    b.HasIndex("TasksID");
+
                     b.ToTable("projects");
-                });
-
-            modelBuilder.Entity("Project_Management_System.Data.SubTasks", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("ProjTaskID")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("StatusID")
-                        .HasColumnType("integer");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ProjTaskID");
-
-                    b.HasIndex("StatusID");
-
-                    b.ToTable("SubTasks");
                 });
 
             modelBuilder.Entity("Project_Management_System.Data.TaskStatus", b =>
@@ -359,24 +330,16 @@ namespace Project_Management_System.Migrations
 
             modelBuilder.Entity("Project_Management_System.Data.ProjTask", b =>
                 {
-                    b.HasOne("Project_Management_System.Data.Project", null)
-                        .WithMany("Tasks")
-                        .HasForeignKey("ProjectID");
-
                     b.HasOne("Project_Management_System.Data.TaskStatus", "Status")
                         .WithMany()
                         .HasForeignKey("StatusID");
                 });
 
-            modelBuilder.Entity("Project_Management_System.Data.SubTasks", b =>
+            modelBuilder.Entity("Project_Management_System.Data.Project", b =>
                 {
-                    b.HasOne("Project_Management_System.Data.ProjTask", null)
-                        .WithMany("SubTasks")
-                        .HasForeignKey("ProjTaskID");
-
-                    b.HasOne("Project_Management_System.Data.TaskStatus", "Status")
+                    b.HasOne("Project_Management_System.Data.ProjTask", "Tasks")
                         .WithMany()
-                        .HasForeignKey("StatusID");
+                        .HasForeignKey("TasksID");
                 });
 #pragma warning restore 612, 618
         }

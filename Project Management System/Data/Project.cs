@@ -9,7 +9,7 @@ namespace Project_Management_System.Data
     {
         public int ID { get; set; }
         public string Name { get; set; }
-        public ProjTask Tasks { get; set; }
+        public List<ProjTask> Tasks { get; set; }
         public string UserID { get; set; }
 
 
