@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Project_Management_System.Data;
+using Project_Management_System.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +41,7 @@ namespace Project_Management_System.Controllers
             }
         }
 
-        // GET: ProjectsController/Details/5
+        // GET: ProjectsController/ProjectView/5
         public ActionResult ProjectView(int? id)
         {
             if (!User.IsInRole("User")) {
@@ -49,11 +51,16 @@ namespace Project_Management_System.Controllers
             {
                 var project = new Project();
                 var user = _context.Users.First(u => u.Email == User.Identity.Name);
+                var projectTasks = new List<ProjTask>();
                 try
                 {
-                    project = _context.projects.First(p => p.ID == id);
+                    var projects = _context.projects.Where(p => p.ID == id).Include(pt => pt.Tasks).ToList();
+                    project = projects.First(p => p.ID == id);
+                   
+                    
                     if (project.UserID == user.Id)
                     {
+                       
                         return View(project);
                     }
                     else {
@@ -158,26 +165,41 @@ namespace Project_Management_System.Controllers
             return View();
         }
 
+        
+
+        //Create Task Page
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateTask(int projectID) {
+            ProjectTaskModel projectTaskModel = new ProjectTaskModel();
+            projectTaskModel.ProjectID = projectID;
+
+            return View(projectTaskModel);
+        }
 
 
         // Creates the task within the selected project.
-        public ActionResult CreateTask(int projectID, string name, string description) {
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateTaskDB(int projectID, string name, string description) {
 
             ProjTask projTask = new ProjTask();
             
             projTask.Name = name;
             projTask.Description = description;
             projTask.Status = _context.taskStatuses.First(s => s.Name == "Incomplete");
-
+            
             //Add the newly created projTask to the database
             _context.projTasks.Add(projTask);
 
             //Add the projTask to the project within the database
             _context.projects.First(p => p.ID == projectID).Tasks.Add(projTask);
+            //_context.projTasks.Add(projTask);
 
             _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
             
-            return View();
 
         }
 

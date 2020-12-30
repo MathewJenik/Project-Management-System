@@ -82,6 +82,40 @@ body {
     left: 0;
 }
 
+.projectList {
+    list-style-type: none;
+    display: in;
+   
+}
+
+.project li{
+    width: calc(33.33333% - 2em);
+    margin-left: 2em;
+    margin-top: 3em;
+    padding: 0;
+    background-color: #eeeeee;
+    
+}
+
+
+.project li {
+    float: left;
+    
+    
+}
+
+.project {
+    float: none;
+    text-align: center;
+}
+
+
+.project li:hover, .project li:focus {
+   background-color: #999999;
+}
+
+
+
 @media (min-width: 992px) {
     .paddedDiv {
         margin-top: 70px;

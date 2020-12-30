@@ -1,17 +1,22 @@
-﻿@model Project_Management_System.Data.Project
+﻿@model Project_Management_System.Models.ProjectTaskModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "CreateTask";
 }
 
-<h1>Create</h1>
+<h1>CreateTask</h1>
 
-<h4>Project</h4>
+<h4>ProjTask</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="CreateTaskDB">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                
+                <input type="hidden" name="ProjectID" asp-for="@Model.ProjectID" class="form-control" value="@Model.ProjectID" />
+               
+            </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -30,6 +35,6 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to Projects</a>
+    <a asp-action="Index">Back to List</a>
 </div>
 
