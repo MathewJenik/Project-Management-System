@@ -29,11 +29,12 @@ namespace Project_Management_System.Controllers
             if (User.IsInRole("User"))
             {
                 // get all the projects that belong to the currently signed in user.
-                var projectList = _context.projects.ToList();
                 var user = _context.Users.First(u => u.Email == User.Identity.Name);
+                var projectList = _context.projects.Where(u => u.UserID == user.Id).Include(pt => pt.Tasks).ThenInclude(t => t.Status).ToList();
+               
                 
                 // return the view as well as all the projects the user has.
-                return View(projectList.FindAll(u => u.UserID == user.Id));
+                return View(projectList);
                 
             }
             else {
@@ -54,7 +55,7 @@ namespace Project_Management_System.Controllers
                 var projectTasks = new List<ProjTask>();
                 try
                 {
-                    var projects = _context.projects.Where(p => p.ID == id).Include(pt => pt.Tasks).ToList();
+                    var projects = _context.projects.Where(p => p.ID == id).Include(pt => pt.Tasks).ThenInclude(pt => pt.Status).Include(pt => pt.Tasks).ThenInclude(pt => pt.SubTasks).ToList();
                     project = projects.First(p => p.ID == id);
                    
                     
@@ -178,17 +179,76 @@ namespace Project_Management_System.Controllers
         }
 
 
-        // Creates the task within the selected project.
+       
+        // Add SubTasks to a ProjTask
+        public ActionResult CreateSubtask() {
+            return View();
+        }
+
+
+        //"/Projects/DeleteProjTask"
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult CreateTaskDB(int projectID, string name, string description) {
+        public JsonResult DeleteProjTask(int projTaskID) {
+            var projTask = _context.projTasks.First(p => p.ID == projTaskID);
+            _context.projTasks.Remove(projTask);
+            _context.SaveChanges();
+            return Json("Suceeded");
+        }
+
+        // POST: ProjectsController/UpdateProjTaskStatus/name
+        [HttpPost]
+        
+        public JsonResult UpdateProjTaskStatus(string name, string status, int projectId)
+        {
+
+            var statuses = _context.taskStatuses;
+
+            var project = _context.projects.Where(p => p.ID == projectId).Include(pt => pt.Tasks).ThenInclude(pt => pt.Status).ToList();
+
+            var stat = statuses.First(s => s.Name.ToLower() == status.ToLower());
+
+            project.First().Tasks.First(t => t.Name == name).Status = stat;
+            _context.SaveChanges();
+           
+            return Json("Suceeded");
+        
+        }
+
+        //Create Task API Call
+        [HttpPost]
+        public JsonResult ApiCreateTask(int projectID, string name, string description)
+        {
 
             ProjTask projTask = new ProjTask();
-            
+
             projTask.Name = name;
             projTask.Description = description;
             projTask.Status = _context.taskStatuses.First(s => s.Name == "Incomplete");
-            
+
+            //Add the newly created projTask to the database
+            _context.projTasks.Add(projTask);
+
+            //Add the projTask to the project within the database
+            _context.projects.First(p => p.ID == projectID).Tasks.Add(projTask);
+
+            _context.SaveChanges();
+
+            return Json("Suceeded");
+
+        }
+
+        // Creates the task within the selected project.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateTaskDB(int projectID, string name, string description)
+        {
+
+            ProjTask projTask = new ProjTask();
+
+            projTask.Name = name;
+            projTask.Description = description;
+            projTask.Status = _context.taskStatuses.First(s => s.Name == "Incomplete");
+
             //Add the newly created projTask to the database
             _context.projTasks.Add(projTask);
 
@@ -196,18 +256,40 @@ namespace Project_Management_System.Controllers
             _context.projects.First(p => p.ID == projectID).Tasks.Add(projTask);
             //_context.projTasks.Add(projTask);
 
-            _context.SaveChangesAsync();
+            _context.SaveChanges();
+
 
             return RedirectToAction("Index");
+
+
+        }
+
+
+        //Create SubTask API Call
+        [HttpPost]
+        public JsonResult ApiCreateSubTask(int taskID, string name, string description)
+        {
+
+            SubTasks subTask = new SubTasks();
+
+            subTask.Name = name;
+            subTask.Description = description;
+            subTask.Status = _context.taskStatuses.First(s => s.Name == "Incomplete");
+
             
+            var project = _context.projects.Where(p => p.Tasks.First(t => t.ID == taskID).ID == taskID).Include(pt => pt.Tasks).ThenInclude(pt => pt.SubTasks);
+            //Add the newly created projTask to the database
+            _context.subTasks.Add(subTask);
+
+            //Add the projTask to the project within the database
+            project.First().Tasks.First(st => st.ID == taskID).SubTasks.Add(subTask);
+
+            _context.SaveChanges();
+
+            return Json("Suceeded");
 
         }
 
-        // Add SubTasks to a ProjTask
-        public ActionResult CreateSubtask() {
-            return View();
-        }
 
-        
     }
 }

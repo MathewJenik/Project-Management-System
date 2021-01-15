@@ -4,33 +4,273 @@
     ViewData["Title"] = "ProjectView";
 }
 
+<link rel="stylesheet" href="~/css/jquery-ui/jquery-ui.css">
+
 <h1>ProjectView</h1>
 
 <div>
     <h4>Project</h4>
     <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.UserID)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.UserID)
-
-        </dd>
-
-    </dl>
 
     @{
-        foreach (var p in Model.Tasks)
+        if (Model.Tasks.Count > 0)
         {
-            <h5>Project: @p.Name, @p.Description, @p.Status</h5>
+            <div class="projectTaskBoard row">
+                
+                    <div class="col">
+                        <h4>Incomplete</h4>
+                        <ul id="incompleteTaskList" class="connectedSortable projectTaskList">
 
+                            @foreach (var p in Model.Tasks.Where(t => t.Status.Name == "Incomplete"))
+                            {
+
+
+
+                                <li plid="@p.Name" id="@p.Name" class="projectTaskLI">
+
+
+                                    <div class="accordion md-accordion" role="tablist" aria-multiselectable="true" id="accordion_@p.ID">
+                                        <div class="card">
+                                            <div class="card-header" id="heading_@p.ID" role="tab">
+                                                
+                                                    <a data-toggle="collapse" href="#collapse_@p.ID" aria-expanded="true"
+                                                       aria-controls="collapse_@p.ID" onclick="rotateAccordionIconByElement('accIcon_@p.ID')">
+                                                        <h5 class="mb-0">
+
+                                                            <i id="infoIcon_@p.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@p.Description" data-trigger="hover" data-placement="top"></i>
+
+                                                            @p.Name <i id="accIcon_@p.ID" class="fa fa-angle-down rotate-accordion-arrow"></i>
+
+
+                                                        </h5>
+
+
+                                                    </a>
+
+
+                                                <div class="linebreak-hr"></div>
+                                                <div class="taskIcons">
+
+                                                    <a onclick="loadDelete(@p.ID, '@p.Name')">
+                                                        <i id="deleteIcon_@p.ID" class="fa fa-trash nospacing blue-icon float-right"></i>
+                                                    </a>
+
+
+                                                    <a>
+                                                        <i id="moveIcon_@p.ID" class="fa fa-arrows-alt nospacing blue-icon rotate-45"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <div id="collapse_@p.ID" class="collapse" aria-labelledby="heading_@p.ID" data-parent="#accordion_@p.ID">
+                                                <div class="card-body">
+
+                                                    <p class="tinyText">Progress:</p>
+                                                    <div class="progress">
+                                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                                                    </div>
+                                                    @{
+                                                        if (p.SubTasks.Count == 0)
+                                                        {
+                                                            <text>No Sub Tasks.</text>
+                                                        } else {
+                                                            foreach (var st in p.SubTasks) { 
+                                                                <hr />
+                                                                <p class="subtask">
+                                                                    <i id="subTaskInfoIcon_@st.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@st.Description" data-trigger="hover" data-placement="top"></i>
+
+                                                                    @st.Name
+
+                                                                </p>
+                                                            }
+                                                        }
+                                                        <button type="button" class="btn btn-light" data-toggle="modal" data-target="#newSubTaskModal_@p.ID">Create a New Sub Task</button>
+                                                        
+                                                        <div class="modal fade" id="newSubTaskModal_@p.ID" tabindex="1" roles="dialog" aria-labelledby="newSubTaskModalTitle_@p.ID" aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="newSubTaskModalTitle_@p.ID"> Create A New Sub Task? </h5>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        HERE IS WHERE THE MODAL CREATION STUFF GOES.
+                                                                        <p>Name: <input type="text" id="subTaskCreateName_@p.ID" /></p>
+                                                                        <p>Description: <input type="text" id="subTaskCreateDescription_@p.ID" /></p>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                                        <button type="button" class="btn btn-primary" onclick="createNewSubTask(@p.ID)">Create</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    }
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
+                                </li>
+
+
+                            }
+
+                        </ul>
+                        
+                        
+                        
+                    </div>
+
+                <div class="col">
+                    <h4>In-Progress</h4>
+                    <ul id="inProgressTaskList" class="connectedSortable projectTaskList">
+
+                        @foreach (var p in Model.Tasks.Where(t => t.Status.Name == "InProgress"))
+                        {
+
+
+
+                            <li plid="@p.Name" id="@p.Name" class="projectTaskLI">
+
+
+                                <div class="accordion md-accordion" role="tablist" aria-multiselectable="true" id="accordion_@p.ID">
+                                    <div class="card">
+                                        <div class="card-header" id="heading_@p.ID" role="tab">
+
+                                            <a data-toggle="collapse" href="#collapse_@p.ID" aria-expanded="true"
+                                               aria-controls="collapse_@p.ID" onclick="rotateAccordionIconByElement('accIcon_@p.ID')">
+                                                <h5 class="mb-0">
+
+                                                    <i id="infoIcon_@p.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@p.Description" data-trigger="hover" data-placement="top"></i>
+
+                                                    @p.Name <i id="accIcon_@p.ID" class="fa fa-angle-down rotate-accordion-arrow"></i>
+
+
+                                                </h5>
+
+
+                                            </a>
+
+
+                                            <div class="linebreak-hr"></div>
+                                            <div class="taskIcons">
+
+                                                <a onclick="loadDelete(@p.ID, '@p.Name')">
+                                                    <i id="deleteIcon_@p.ID" class="fa fa-trash nospacing blue-icon float-right"></i>
+                                                </a>
+
+
+                                                <a>
+                                                    <i id="moveIcon_@p.ID" class="fa fa-arrows-alt nospacing blue-icon rotate-45"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div id="collapse_@p.ID" class="collapse" aria-labelledby="heading_@p.ID" data-parent="#accordion_@p.ID">
+                                            <div class="card-body">
+
+                                                @p.Description
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+                            </li>
+
+
+                        }
+
+                    </ul>
+                </div>
+
+                <div class="col">
+                    <h4>Completed</h4>
+                    <ul id="completeTaskList" class="connectedSortable projectTaskList">
+
+                        @foreach (var p in Model.Tasks.Where(t => t.Status.Name == "Complete"))
+                        {
+
+
+
+                            <li plid="@p.Name" id="@p.Name" class="projectTaskLI">
+
+
+                                <div class="accordion md-accordion" role="tablist" aria-multiselectable="true" id="accordion_@p.ID">
+                                    <div class="card">
+                                        <div class="card-header" id="heading_@p.ID" role="tab">
+
+                                            <a data-toggle="collapse" href="#collapse_@p.ID" aria-expanded="true"
+                                               aria-controls="collapse_@p.ID" onclick="rotateAccordionIconByElement('accIcon_@p.ID')">
+                                                <h5 class="mb-0">
+
+                                                    <i id="infoIcon_@p.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@p.Description" data-trigger="hover" data-placement="top"></i>
+
+                                                    @p.Name <i id="accIcon_@p.ID" class="fa fa-angle-down rotate-accordion-arrow"></i>
+
+
+                                                </h5>
+
+
+                                            </a>
+
+
+                                            <div class="linebreak-hr"></div>
+                                            <div class="taskIcons">
+
+                                                <a onclick="loadDelete(@p.ID, '@p.Name')">
+                                                    <i id="deleteIcon_@p.ID" class="fa fa-trash nospacing blue-icon float-right"></i>
+                                                </a>
+
+
+                                                <a>
+                                                    <i id="moveIcon_@p.ID" class="fa fa-arrows-alt nospacing blue-icon rotate-45"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div id="collapse_@p.ID" class="collapse" aria-labelledby="heading_@p.ID" data-parent="#accordion_@p.ID">
+                                            <div class="card-body">
+
+                                                <p class="tinyText">Progress:</p>
+                                                <div class="progress">
+                                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
+                                                </div>
+                                                @{
+                                                    if (p.SubTasks.Count == 0)
+                                                    {
+                                                        <text>No Sub Tasks.</text>
+                                                    }
+                                                    <button class="btn btn-light">Create a New Sub Task</button>
+                                                }
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+                            </li>
+
+
+                        }
+
+                    </ul>
+                </div>
+            </div>
+            
         }
 
     }
@@ -53,3 +293,238 @@
     <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+
+
+@section scripts {
+    <!--<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        -->
+    
+    <script src="~/lib/jquery-ui/jquery-ui.js"></script>
+    
+    <script>
+        $(function () {
+            $("#incompleteTaskList, #inProgressTaskList, #completeTaskList").sortable({
+                connectWith: ".connectedSortable",
+                update: function (event, ui) {
+                    //db id of the item sorted
+                    //alert(ui.item.attr('plid'));
+                    //db id of the item next to which the dragged item was dropped
+                    //alert(ui.item.prev().attr('plid'));
+        ////
+                    /*
+                    // POST to server using $.post or $.ajax
+                    $.post("../../ProjectsController/UpdateProjTaskStatus/",
+                        {
+                            Name: "Test",
+                            Projectid: "1"
+                        });
+                        */
+                    var status = $(ui.item).parent().attr('id').split("TaskList");
+                    //alert("Status: " + status);
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/Projects/UpdateProjTaskStatus/test",
+                        data: { name: ui.item.attr('plid'), status: status, projectId: @Model.ID},
+                        //data: {name: ui.item.attr('plid')  },
+
+                        success: function (response) {
+                            if (response != null) {
+                                //alert("Name : " + response);
+                            } else {
+                                //alert("Something went wrong");
+                            }
+                        },
+                        failure: function (response) {
+                            //alert(response.responseText);
+                            //alert("failed");
+                        },
+                        error: function (response) {
+                            //alert(response.responseText);
+                           // alert("error");
+                        }
+                    });
+
+                   /* $.ajax({
+                        url: '../../Projects/UpdateProjTaskStatus',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(
+                            {
+
+                                reservationId: Model.ID,
+                                name: "test",
+                            }),
+                        dataType: 'json',
+                        success: function (data) {
+                            var d = data;
+                            alert("done");
+
+                        },
+                        error: function (data) {
+                            var d = data;
+                            alert("Error");
+                        }*/
+                        /*
+                    $.ajax({
+                        type: "POST",
+                        url: "Url.Action("UpdateProjTaskStatus")",
+                        data: JSON.stringify("1"),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (response) {
+                            if (response != null) {
+                                alert("Name : " + response.Name + ", Designation : " + response.Designation + ", Location :" + response.Location);
+                            } else {
+                                alert("Something went wrong");
+                            }
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                            alert("failed");
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                            alert("error");
+                        }*/
+                    //});
+
+                },
+            }).disableSelection();
+        });
+
+        //$(".connectedSortable").on("sortupdate", function (event, ui) { });
+        /*function rotateAccordionIcon(item) {
+            $(item).toggleClass("down");
+            alert("WORKING");
+        }
+        */
+        function rotateAccordionIconByElement(elementName) {
+            $(document.getElementById(elementName)).toggleClass("down");
+        }
+
+
+        function loadInformation(description, elementName) {
+
+            $(document.getElementById(elementName)).click(function (e) {
+                alert(description);
+
+                e.stopPropagation();
+
+            })
+
+        }
+        /*
+        function setupLoadInfoClickEvent(description, elementName) {
+            $(document.getElementById(elementName)).click(function (e) {
+                alert(description);
+
+                e.stopPropagation();
+
+            })
+        }
+
+        atforeach (var p in Model.Tasks.ToList())
+        {
+            <text> setupLoadInfoClickEvent('atp.Description', 'infoIcon_atp.ID');</text>
+        }
+        */
+
+        //function to delete the selected task
+        function loadDelete(id, name) {
+
+            if (confirm('Are you sure you want to delete this task?')) {
+
+                // ajax call to delete the item from the db
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Projects/DeleteProjTask",
+                    data: { projTaskID: id },
+                    
+                    success: function (response) {
+                        var li = document.getElementById(name);
+                        document.getElementById(name).parentNode.removeChild(li);
+                        //console.log(li);
+                        if (response != null) {
+                            // Remove the item from the list.
+                            
+                            //alert("NAME: " + name);
+                        } else {
+                            //alert("Something went wrong");
+                        }
+                    },
+                    failure: function (response) {
+                        //alert(response.responseText);
+                        //alert("failed");
+                    },
+                    error: function (response) {
+                        //alert(response.responseText);
+                        // alert("error");
+                    }
+                });
+                
+            } else {
+                
+
+            }
+
+        }
+
+        function createNewSubTask(ID) {
+            var Name = document.getElementById("subTaskCreateName_"+ID).value;
+            var Description = document.getElementById("subTaskCreateDescription_" + ID).value;
+            console.log(document.getElementById("subTaskCreateName_" + ID));
+
+            //ajax call:
+
+
+            $.ajax({
+                type: "POST",
+                url: "/Projects/ApiCreateSubTask",
+                data: { taskID: ID, name: Name, description: Description },
+
+                success: function (response) {
+                    if (response != null) {
+                        alert("NEW SUBTASK WAS CREATED");
+                    } else {
+                        //alert("Something went wrong");
+                    }
+                },
+                failure: function (response) {
+                    //alert(response.responseText);
+                    //alert("failed");
+                },
+                error: function (response) {
+                    //alert(response.responseText);
+                    // alert("error");
+                }
+            });
+
+        }
+
+
+        //enable popovers on the page:
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        })
+
+        /*
+        $(".rotate-accordion-arrow").click(function () {
+            $(this).toggleClass("down");
+        })
+
+        $(".rotate-accordion-link").click(function () {
+            $(".rotate-accordion-arrow").toggleClass("down");
+        })
+        */
+    </script>
+} 
+
+
+
+
+
+

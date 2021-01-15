@@ -64,6 +64,8 @@ namespace Project_Management_System
 
             app.UseRouting();
 
+
+
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -74,6 +76,9 @@ namespace Project_Management_System
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
         }
+
+        
     }
 }

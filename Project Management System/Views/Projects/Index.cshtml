@@ -21,6 +21,7 @@
                             <div>
                                 <h5>Project: @p.Name</h5>
                                 <p>@p.Description</p>
+                                <p>Remaining Tasks: @p.Tasks.Where(t => t.Status.Name != "Complete").Count() /  @p.Tasks.Count()</p>
                             </div>
                         </a>
                     </li>

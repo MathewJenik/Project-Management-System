@@ -12,5 +12,9 @@ namespace Project_Management_System.Data
         public string Description { get; set; }
         public TaskStatus Status { get; set; }
         public List<SubTasks> SubTasks { get; set; }
+
+        public ProjTask() {
+            SubTasks = new List<SubTasks>();
+        }
     }
 }

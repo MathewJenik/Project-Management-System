@@ -136,3 +136,114 @@ body {
     }
 
 }
+
+
+
+.projectTaskList {
+    border: 1px solid #eee;
+    
+    min-height: 20px;
+    list-style-type: none;
+    margin: 0;
+    padding: 5px 0 0 0;
+    float: left;
+    margin-right: 10px;
+}
+
+    .projectTaskList li {
+        margin: 0 5px 5px 5px;
+        padding: 5px;
+        font-size: 1.2em;
+        
+        background-color: lightgray;
+        border: 1px solid;
+        border-radius: 5px 5px;
+        border-color: darkgray;
+    }
+
+
+
+
+.projectTaskList {
+    
+    height: calc(100% - 40px);
+    width: inherit;
+   
+    background-color: whitesmoke;
+}
+
+.projectTaskList-LastItem {
+
+    margin-bottom: 100px;
+}
+
+.projectTaskBoard {
+    background-color: aliceblue;
+    border: 1px solid;
+    border-color: aquamarine;
+    
+}
+
+.projectTaskBoard h4 {
+    text-align: center;
+
+}
+
+.rotate-accordion-arrow {
+    -moz-transition: all 0.25s linear;
+    -webkit-transition: all 0.25s linear;
+    transition: all 0.25s linear;
+
+    text-align: end;
+    float: right;
+}
+
+.rotate-accordion-arrow.down {
+    -moz-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.nospacing {
+    padding: 0px;
+    margin: 0px;
+
+}
+
+.linebreak-hr {
+    padding: 0px;
+    margin: 0px;
+    border-top: 1px solid gray;
+    width: 100%;
+}
+
+.blue-icon {
+    color: dodgerblue;
+}
+
+.rotate-45 {
+    -moz-transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.circle-icon {
+    padding: 0px;
+    margin: 0px;
+
+}
+
+.tinyText {
+    font-size: x-small;
+    margin: 0px;
+    padding: 0px;
+    text-align: center;
+}
+
+.subtask {
+    font-size: medium;
+    margin: 10px;
+    padding: 10px;
+    text-align: center;
+
+}

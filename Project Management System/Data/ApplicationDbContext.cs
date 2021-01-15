@@ -16,6 +16,7 @@ namespace Project_Management_System.Data
         public DbSet<Project> projects { get; set; }
         public DbSet<ProjTask> projTasks { get; set; }
         public DbSet<TaskStatus> taskStatuses { get; set; }
+        public DbSet<SubTasks> subTasks { get; set; }
         
 
     }

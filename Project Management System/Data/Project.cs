@@ -12,7 +12,7 @@ namespace Project_Management_System.Data
         public string Description { get; set; }
         public List<ProjTask> Tasks { get; set; }
         public string UserID { get; set; }
-
+        public string Notes { get; set; }
         public Project() {
             Tasks = new List<ProjTask>();
         }

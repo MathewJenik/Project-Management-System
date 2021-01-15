@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Project_Management_System.Data;
@@ -9,9 +10,10 @@ using Project_Management_System.Data;
 namespace Project_Management_System.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210113152450_implement_project_notes")]
+    partial class implement_project_notes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -294,7 +296,7 @@ namespace Project_Management_System.Migrations
 
                     b.HasIndex("StatusID");
 
-                    b.ToTable("subTasks");
+                    b.ToTable("SubTasks");
                 });
 
             modelBuilder.Entity("Project_Management_System.Data.TaskStatus", b =>
