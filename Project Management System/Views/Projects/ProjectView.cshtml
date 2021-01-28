@@ -26,7 +26,7 @@
 
 
 
-                                <li plid="@p.Name" id="@p.Name" class="projectTaskLI">
+                                <li plid="@p.ID" id="@p.ID" class="projectTaskLI">
 
 
                                     <div class="accordion md-accordion" role="tablist" aria-multiselectable="true" id="accordion_@p.ID">
@@ -34,7 +34,7 @@
                                             <div class="card-header" id="heading_@p.ID" role="tab">
                                                 
                                                     <a data-toggle="collapse" href="#collapse_@p.ID" aria-expanded="true"
-                                                       aria-controls="collapse_@p.ID" onclick="rotateAccordionIconByElement('accIcon_@p.ID')">
+                                                       aria-controls="collapse_@p.ID" onclick="rotateAccordionIconByElement('accIcon_@p.ID'),onLoadSetProgress(@p.ID)">
                                                         <h5 class="mb-0">
 
                                                             <i id="infoIcon_@p.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@p.Description" data-trigger="hover" data-placement="top"></i>
@@ -67,48 +67,62 @@
 
                                                     <p class="tinyText">Progress:</p>
                                                     <div class="progress">
-                                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                                                        <div id="taskProgressBar_@p.ID" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
                                                     </div>
-                                                    @{
-                                                        if (p.SubTasks.Count == 0)
-                                                        {
-                                                            <text>No Sub Tasks.</text>
-                                                        } else {
-                                                            foreach (var st in p.SubTasks) { 
-                                                                <hr />
-                                                                <p class="subtask">
-                                                                    <i id="subTaskInfoIcon_@st.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@st.Description" data-trigger="hover" data-placement="top"></i>
+                                                    <div id="subTaskContainer_@p.ID">
+                                                        @{
+                                                            if (p.SubTasks.Count == 0)
+                                                            {
+                                                                <text>No Sub Tasks.</text>
+                                                            }
+                                                            else
+                                                            {
+                                                                <text><div></div></text>
+                                                                foreach (var st in p.SubTasks)
+                                                                {
+                                                                    <hr />
 
-                                                                    @st.Name
+                                                                    var checkboxStatus = true; if (st.Status.Name == "Incomplete") { checkboxStatus = false; }
+                                                                    <Text>
+                                                                    <p class="subtask">
+                                                                        Completed: <input id="subTaskCompleteInput_@st.ID" type="checkbox" onclick="changeSubTaskCompleted(@st.ID, @p.ID)" checked="@checkboxStatus" />
+                                                                        <i id="subTaskInfoIcon_@st.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@st.Description" data-trigger="hover" data-placement="top"></i>
 
-                                                                </p>
+                                                                        @st.Name
+
+                                                                    </p>
+                                                                    </Text>
+
+                                                                }
+
                                                             }
                                                         }
-                                                        <button type="button" class="btn btn-light" data-toggle="modal" data-target="#newSubTaskModal_@p.ID">Create a New Sub Task</button>
-                                                        
-                                                        <div class="modal fade" id="newSubTaskModal_@p.ID" tabindex="1" roles="dialog" aria-labelledby="newSubTaskModalTitle_@p.ID" aria-hidden="true">
-                                                            <div class="modal-dialog" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title" id="newSubTaskModalTitle_@p.ID"> Create A New Sub Task? </h5>
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        HERE IS WHERE THE MODAL CREATION STUFF GOES.
-                                                                        <p>Name: <input type="text" id="subTaskCreateName_@p.ID" /></p>
-                                                                        <p>Description: <input type="text" id="subTaskCreateDescription_@p.ID" /></p>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                                        <button type="button" class="btn btn-primary" onclick="createNewSubTask(@p.ID)">Create</button>
-                                                                    </div>
+                                                    </div>
+                                                    <button type="button" class="btn btn-light" data-toggle="modal" data-target="#newSubTaskModal_@p.ID">Create a New Sub Task</button>
+
+                                                    <div class="modal fade" id="newSubTaskModal_@p.ID" tabindex="1" roles="dialog" aria-labelledby="newSubTaskModalTitle_@p.ID" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="newSubTaskModalTitle_@p.ID"> Create A New Sub Task? </h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+
+                                                                    <p>Name: <input type="text" id="subTaskCreateName_@p.ID" /></p>
+                                                                    <p>Description: <input type="text" id="subTaskCreateDescription_@p.ID" /></p>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                                    <button type="button" class="btn btn-primary" onclick="createNewSubTask(@p.ID)" data-dismiss="modal">Create</button>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        
-                                                    }
+                                                    </div>
+
+
 
                                                 </div>
                                             </div>
@@ -138,55 +152,113 @@
 
 
 
-                            <li plid="@p.Name" id="@p.Name" class="projectTaskLI">
+                            <li plid="@p.ID" id="@p.ID" class="projectTaskLI">
 
 
-                                <div class="accordion md-accordion" role="tablist" aria-multiselectable="true" id="accordion_@p.ID">
-                                    <div class="card">
-                                        <div class="card-header" id="heading_@p.ID" role="tab">
+                            <div class="accordion md-accordion" role="tablist" aria-multiselectable="true" id="accordion_@p.ID">
+                                <div class="card">
+                                    <div class="card-header" id="heading_@p.ID" role="tab">
 
-                                            <a data-toggle="collapse" href="#collapse_@p.ID" aria-expanded="true"
-                                               aria-controls="collapse_@p.ID" onclick="rotateAccordionIconByElement('accIcon_@p.ID')">
-                                                <h5 class="mb-0">
+                                        <a data-toggle="collapse" href="#collapse_@p.ID" aria-expanded="true"
+                                           aria-controls="collapse_@p.ID" onclick="rotateAccordionIconByElement('accIcon_@p.ID'),onLoadSetProgress(@p.ID)">
+                                            <h5 class="mb-0">
 
-                                                    <i id="infoIcon_@p.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@p.Description" data-trigger="hover" data-placement="top"></i>
+                                                <i id="infoIcon_@p.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@p.Description" data-trigger="hover" data-placement="top"></i>
 
-                                                    @p.Name <i id="accIcon_@p.ID" class="fa fa-angle-down rotate-accordion-arrow"></i>
-
-
-                                                </h5>
+                                                @p.Name <i id="accIcon_@p.ID" class="fa fa-angle-down rotate-accordion-arrow"></i>
 
 
+                                            </h5>
+
+
+                                        </a>
+
+
+                                        <div class="linebreak-hr"></div>
+                                        <div class="taskIcons">
+
+                                            <a onclick="loadDelete(@p.ID, '@p.Name')">
+                                                <i id="deleteIcon_@p.ID" class="fa fa-trash nospacing blue-icon float-right"></i>
                                             </a>
 
 
-                                            <div class="linebreak-hr"></div>
-                                            <div class="taskIcons">
-
-                                                <a onclick="loadDelete(@p.ID, '@p.Name')">
-                                                    <i id="deleteIcon_@p.ID" class="fa fa-trash nospacing blue-icon float-right"></i>
-                                                </a>
-
-
-                                                <a>
-                                                    <i id="moveIcon_@p.ID" class="fa fa-arrows-alt nospacing blue-icon rotate-45"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-
-                                        <div id="collapse_@p.ID" class="collapse" aria-labelledby="heading_@p.ID" data-parent="#accordion_@p.ID">
-                                            <div class="card-body">
-
-                                                @p.Description
-                                            </div>
+                                            <a>
+                                                <i id="moveIcon_@p.ID" class="fa fa-arrows-alt nospacing blue-icon rotate-45"></i>
+                                            </a>
                                         </div>
                                     </div>
 
+                                    <div id="collapse_@p.ID" class="collapse" aria-labelledby="heading_@p.ID" data-parent="#accordion_@p.ID">
+                                        <div class="card-body">
+
+                                            <p class="tinyText">Progress:</p>
+                                            <div class="progress">
+                                                <div id="taskProgressBar_@p.ID" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                                            </div>
+                                            <div id="subTaskContainer_@p.ID">
+                                                @{
+                                                    if (p.SubTasks.Count == 0)
+                                                    {
+                                                        <text>No Sub Tasks.</text>
+                                                    }
+                                                    else
+                                                    {
+                                                        <text><div></div></text>
+                                                        foreach (var st in p.SubTasks)
+                                                        {
+                                                            <hr />
+
+                                                            var checkboxStatus = true; if (st.Status.Name == "Incomplete") { checkboxStatus = false; }
+                                                            <Text>
+                                                            <p class="subtask">
+                                                                Completed: <input id="subTaskCompleteInput_@st.ID" type="checkbox" onclick="changeSubTaskCompleted(@st.ID, @p.ID)" checked="@checkboxStatus" />
+                                                                <i id="subTaskInfoIcon_@st.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@st.Description" data-trigger="hover" data-placement="top"></i>
+
+                                                                @st.Name
+
+                                                            </p>
+                                                            </Text>
+
+                                                        }
+
+                                                    }
+                                                }
+                                            </div>
+                                            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#newSubTaskModal_@p.ID">Create a New Sub Task</button>
+
+                                            <div class="modal fade" id="newSubTaskModal_@p.ID" tabindex="1" roles="dialog" aria-labelledby="newSubTaskModalTitle_@p.ID" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="newSubTaskModalTitle_@p.ID"> Create A New Sub Task? </h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+
+                                                            <p>Name: <input type="text" id="subTaskCreateName_@p.ID" /></p>
+                                                            <p>Description: <input type="text" id="subTaskCreateDescription_@p.ID" /></p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                            <button type="button" class="btn btn-primary" onclick="createNewSubTask(@p.ID)" data-dismiss="modal">Create</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+                                    </div>
                                 </div>
 
+                            </div>
 
 
-                            </li>
+
+                        </li>
 
 
                         }
@@ -202,68 +274,114 @@
                         {
 
 
-
-                            <li plid="@p.Name" id="@p.Name" class="projectTaskLI">
-
-
-                                <div class="accordion md-accordion" role="tablist" aria-multiselectable="true" id="accordion_@p.ID">
-                                    <div class="card">
-                                        <div class="card-header" id="heading_@p.ID" role="tab">
-
-                                            <a data-toggle="collapse" href="#collapse_@p.ID" aria-expanded="true"
-                                               aria-controls="collapse_@p.ID" onclick="rotateAccordionIconByElement('accIcon_@p.ID')">
-                                                <h5 class="mb-0">
-
-                                                    <i id="infoIcon_@p.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@p.Description" data-trigger="hover" data-placement="top"></i>
-
-                                                    @p.Name <i id="accIcon_@p.ID" class="fa fa-angle-down rotate-accordion-arrow"></i>
+                        
+                        <li plid="@p.ID" id="@p.ID" class="projectTaskLI">
 
 
-                                                </h5>
+                            <div class="accordion md-accordion" role="tablist" aria-multiselectable="true" id="accordion_@p.ID">
+                                <div class="card">
+                                    <div class="card-header" id="heading_@p.ID" role="tab">
+
+                                        <a data-toggle="collapse" href="#collapse_@p.ID" aria-expanded="true"
+                                           aria-controls="collapse_@p.ID" onclick="rotateAccordionIconByElement('accIcon_@p.ID'),onLoadSetProgress(@p.ID)">
+                                            <h5 class="mb-0">
+
+                                                <i id="infoIcon_@p.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@p.Description" data-trigger="hover" data-placement="top"></i>
+
+                                                @p.Name <i id="accIcon_@p.ID" class="fa fa-angle-down rotate-accordion-arrow"></i>
 
 
+                                            </h5>
+
+
+                                        </a>
+
+
+                                        <div class="linebreak-hr"></div>
+                                        <div class="taskIcons">
+
+                                            <a onclick="loadDelete(@p.ID, '@p.Name')">
+                                                <i id="deleteIcon_@p.ID" class="fa fa-trash nospacing blue-icon float-right"></i>
                                             </a>
 
 
-                                            <div class="linebreak-hr"></div>
-                                            <div class="taskIcons">
-
-                                                <a onclick="loadDelete(@p.ID, '@p.Name')">
-                                                    <i id="deleteIcon_@p.ID" class="fa fa-trash nospacing blue-icon float-right"></i>
-                                                </a>
-
-
-                                                <a>
-                                                    <i id="moveIcon_@p.ID" class="fa fa-arrows-alt nospacing blue-icon rotate-45"></i>
-                                                </a>
-                                            </div>
+                                            <a>
+                                                <i id="moveIcon_@p.ID" class="fa fa-arrows-alt nospacing blue-icon rotate-45"></i>
+                                            </a>
                                         </div>
+                                    </div>
 
-                                        <div id="collapse_@p.ID" class="collapse" aria-labelledby="heading_@p.ID" data-parent="#accordion_@p.ID">
-                                            <div class="card-body">
+                                    <div id="collapse_@p.ID" class="collapse" aria-labelledby="heading_@p.ID" data-parent="#accordion_@p.ID">
+                                        <div class="card-body">
 
-                                                <p class="tinyText">Progress:</p>
-                                                <div class="progress">
-                                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
-                                                </div>
+                                            <p class="tinyText">Progress:</p>
+                                            <div class="progress">
+                                                <div id="taskProgressBar_@p.ID" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100">100%</div>
+                                            </div>
+                                            <div id="subTaskContainer_@p.ID">
                                                 @{
                                                     if (p.SubTasks.Count == 0)
                                                     {
                                                         <text>No Sub Tasks.</text>
                                                     }
-                                                    <button class="btn btn-light">Create a New Sub Task</button>
-                                                }
+                                                    else
+                                                    {
+                                                        <text><div></div></text>
+                                                        foreach (var st in p.SubTasks)
+                                                        {
+                                                            <hr />
 
+                                                            var checkboxStatus = true; if (st.Status.Name == "Incomplete") { checkboxStatus = false; }
+                                                            <Text>
+                                                            <p class="subtask">
+                                                                Completed: <input id="subTaskCompleteInput_@st.ID" type="checkbox" onclick="changeSubTaskCompleted(@st.ID, @p.ID)" checked="@checkboxStatus" />
+                                                                <i id="subTaskInfoIcon_@st.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@st.Description" data-trigger="hover" data-placement="top"></i>
+
+                                                                @st.Name
+
+                                                            </p>
+                                                            </Text>
+
+                                                        }
+
+                                                    }
+                                                }
                                             </div>
+                                            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#newSubTaskModal_@p.ID">Create a New Sub Task</button>
+
+                                            <div class="modal fade" id="newSubTaskModal_@p.ID" tabindex="1" roles="dialog" aria-labelledby="newSubTaskModalTitle_@p.ID" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="newSubTaskModalTitle_@p.ID"> Create A New Sub Task? </h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+
+                                                            <p>Name: <input type="text" id="subTaskCreateName_@p.ID" /></p>
+                                                            <p>Description: <input type="text" id="subTaskCreateDescription_@p.ID" /></p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                            <button type="button" class="btn btn-primary" onclick="createNewSubTask(@p.ID)" data-dismiss="modal">Create</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
                                         </div>
                                     </div>
-
                                 </div>
 
+                            </div>
 
 
-                            </li>
 
+                        </li>
 
                         }
 
@@ -327,85 +445,45 @@
                     $.ajax({
                         type: "POST",
                         url: "/Projects/UpdateProjTaskStatus/test",
-                        data: { name: ui.item.attr('plid'), status: status, projectId: @Model.ID},
-                        //data: {name: ui.item.attr('plid')  },
-
+                        data: { id: ui.item.attr('plid'), status: status, projectId: @Model.ID},
+                        
                         success: function (response) {
                             if (response != null) {
-                                //alert("Name : " + response);
+
+                                // make sure the status of the task is now set to complete
+                                if (status == "complete,") {
+                                    // get the current tasks ID.
+                                    var currentID = ui.item.attr('id');
+
+                                    // call function to set the progress to complete.
+                                    setProgressComplete(currentID, false);
+                                }
+                                else {
+                                    onLoadSetProgress(ui.item.attr('id'));
+                                }
                             } else {
-                                //alert("Something went wrong");
+                                
                             }
                         },
                         failure: function (response) {
-                            //alert(response.responseText);
-                            //alert("failed");
+                            
                         },
                         error: function (response) {
-                            //alert(response.responseText);
-                           // alert("error");
+                            
                         }
                     });
 
-                   /* $.ajax({
-                        url: '../../Projects/UpdateProjTaskStatus',
-                        method: 'POST',
-                        contentType: 'application/json',
-                        data: JSON.stringify(
-                            {
-
-                                reservationId: Model.ID,
-                                name: "test",
-                            }),
-                        dataType: 'json',
-                        success: function (data) {
-                            var d = data;
-                            alert("done");
-
-                        },
-                        error: function (data) {
-                            var d = data;
-                            alert("Error");
-                        }*/
-                        /*
-                    $.ajax({
-                        type: "POST",
-                        url: "Url.Action("UpdateProjTaskStatus")",
-                        data: JSON.stringify("1"),
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        success: function (response) {
-                            if (response != null) {
-                                alert("Name : " + response.Name + ", Designation : " + response.Designation + ", Location :" + response.Location);
-                            } else {
-                                alert("Something went wrong");
-                            }
-                        },
-                        failure: function (response) {
-                            alert(response.responseText);
-                            alert("failed");
-                        },
-                        error: function (response) {
-                            alert(response.responseText);
-                            alert("error");
-                        }*/
-                    //});
 
                 },
             }).disableSelection();
         });
 
-        //$(".connectedSortable").on("sortupdate", function (event, ui) { });
-        /*function rotateAccordionIcon(item) {
-            $(item).toggleClass("down");
-            alert("WORKING");
-        }
-        */
+        //function to rotate the accordian icon used within the ui. This icon is used to say open and closed, when tasks are opened or closed.
         function rotateAccordionIconByElement(elementName) {
             $(document.getElementById(elementName)).toggleClass("down");
         }
 
-
+        // jquery function to stop propagation of elements.
         function loadInformation(description, elementName) {
 
             $(document.getElementById(elementName)).click(function (e) {
@@ -416,25 +494,12 @@
             })
 
         }
-        /*
-        function setupLoadInfoClickEvent(description, elementName) {
-            $(document.getElementById(elementName)).click(function (e) {
-                alert(description);
-
-                e.stopPropagation();
-
-            })
-        }
-
-        atforeach (var p in Model.Tasks.ToList())
-        {
-            <text> setupLoadInfoClickEvent('atp.Description', 'infoIcon_atp.ID');</text>
-        }
-        */
-
+        
         //function to delete the selected task
         function loadDelete(id, name) {
 
+
+            //confirmation message to make sure user wants to make this change.
             if (confirm('Are you sure you want to delete this task?')) {
 
                 // ajax call to delete the item from the db
@@ -443,52 +508,67 @@
                     type: "POST",
                     url: "/Projects/DeleteProjTask",
                     data: { projTaskID: id },
-                    
+
                     success: function (response) {
+                        // remove the child from the list.
                         var li = document.getElementById(name);
                         document.getElementById(name).parentNode.removeChild(li);
-                        //console.log(li);
+                        
                         if (response != null) {
-                            // Remove the item from the list.
-                            
-                            //alert("NAME: " + name);
+                           
                         } else {
-                            //alert("Something went wrong");
+                           
                         }
                     },
                     failure: function (response) {
-                        //alert(response.responseText);
-                        //alert("failed");
+                        
                     },
                     error: function (response) {
-                        //alert(response.responseText);
-                        // alert("error");
+                        
                     }
                 });
-                
+
             } else {
-                
+
 
             }
 
         }
 
+        // function to create a mew subtask.
         function createNewSubTask(ID) {
             var Name = document.getElementById("subTaskCreateName_"+ID).value;
             var Description = document.getElementById("subTaskCreateDescription_" + ID).value;
             console.log(document.getElementById("subTaskCreateName_" + ID));
 
-            //ajax call:
+            //ajax call too get the required data and to create the subtask in the database
 
 
             $.ajax({
-                type: "POST",
+                type: "GET",
                 url: "/Projects/ApiCreateSubTask",
                 data: { taskID: ID, name: Name, description: Description },
 
                 success: function (response) {
                     if (response != null) {
-                        alert("NEW SUBTASK WAS CREATED");
+                        
+                        var res = JSON.stringify(response);
+                        var obj = JSON.parse(res);
+                        var task = document.getElementById("subTaskContainer_" + ID);
+
+                        // adding the required html to the list.
+                        task.innerHTML += "<hr/><p class='subtask'> Completed: <input id='subTaskCompleteInput_" + obj.stID + "' type='checkbox' onclick='changeSubTaskCompleted(" + obj.stID + "," + ID + ")' /> " + " " + " <i id='subTaskInfoIcon_" + obj.stID + "' class='fa fa-info-circle nospacing blue-icon circle-icon' data-toggle='popover' data-original-title='Description' data-content='" + Description + "' data-trigger='hover' data-placement='top'></i>" + " " + Name + " " + "</p>";
+                        
+                        // enabling the newly added popover.
+                        $(function () {
+                            $('[data-toggle="popover"]').popover()
+                        })
+
+                        //reload the progress bar, to set the new progress since a new subtask has been added.
+                        onLoadSetProgress(ID);
+
+
+
                     } else {
                         //alert("Something went wrong");
                     }
@@ -503,7 +583,175 @@
                 }
             });
 
+
+
         }
+
+        // change subtask complete
+        function changeSubTaskCompleted(SubTaskID, TaskID) {
+            // get the sub task
+            var st = document.getElementById("subTaskCompleteInput_" + SubTaskID);
+            // get the tasks progress bar and empty the text
+            var progressBar = document.getElementById("taskProgressBar_" + TaskID)
+            //progressBar.innerHTML = "";
+
+            var completed = st.checked;
+
+            // api call to change the status of the task.
+            $.ajax({
+                type: "POST",
+                url: "/Projects/ApiChangeSubTaskStatus",
+                data: { subTaskID: SubTaskID, completed: completed },
+
+                success: function (response) {
+                    if (response != null) {
+
+                        // api call to get the required details and assign them to there respective variables.
+
+                        var totalSubTasks = 0;
+                        var totalCompleteTasks = 1;
+
+                        $.ajax({
+                            type: "GET",
+                            url: "/Projects/ApiGetSubTaskProgressDetails",
+                            data: { taskID: TaskID },
+
+                            success: function (response) {
+                                if (response != null) {
+
+                                    var res = JSON.stringify(response);
+                                    //RESPONSE: { "totalSubTasks": 2, "totalCompleteTasks": 2 }
+                                    //alert("RESPONSE: " + res);
+
+                                    var obj = JSON.parse(res);
+
+                                    totalSubTasks = obj.totalSubTasks;
+                                    totalCompleteTasks = obj.totalCompleteTasks;
+                                    //alert("totalST : " + totalSubTasks + " totalIT : " + totalCompleteTasks)
+                                    // set the progress bar to the correct amount
+                                    progressBar.style.width = (((totalCompleteTasks / totalSubTasks) * 100) + "%");
+                                    //alert("IF : " + ((totalCompleteTasks / totalSubTasks) * 100) + "%");
+                                    progressBar.innerHTML = ((totalCompleteTasks / totalSubTasks) * 100) + "%";
+
+                                } else {
+
+                                }
+                            },
+                            failure: function (response) {
+
+                            },
+                            error: function (response) {
+
+                            }
+                        });
+
+                    } else {
+
+                    }
+                },
+                failure: function (response) {
+                    //alert(response.responseText);
+                    //alert("failed");
+                },
+                error: function (response) {
+                    //alert(response.responseText);
+                    // alert("error");
+                }
+            });
+
+
+        }
+
+        // function to 
+        function setProgressComplete(TaskID, removeClass) {
+            // jquery to turn the progress bar green, to the success state.
+
+            if (removeClass == false) {
+                // get the tasks progress bar and empty the text
+                var progressBar = document.getElementById("taskProgressBar_" + TaskID)
+                progressBar.style.width = "100%";
+
+
+                progressBar.innerText = "100%";
+                $(document.getElementById("taskProgressBar_" + TaskID)).addClass("bg-success");
+            } else {
+                $(document.getElementById("taskProgressBar_" + TaskID)).removeClass("bg-success");
+            }
+            
+        }
+
+        // function to set the progress of each task on load, or when required.
+        function onLoadSetProgress(TaskID) {
+
+            // get the tasks progress bar and empty the text
+            var progressBar = document.getElementById("taskProgressBar_" + TaskID)
+            
+
+            // api call to get the required details and assign them to there respective variables.
+
+            var totalSubTasks = 0;
+            var totalCompleteTasks = 1;
+            var taskStatus = "incomplete"
+
+            $.ajax({
+                type: "GET",
+                url: "/Projects/ApiGetSubTaskProgressDetails",
+                data: { taskID: TaskID },
+
+                success: function (response) {
+                    if (response != null) {
+
+                        var res = JSON.stringify(response);
+                        //RESPONSE: { "totalSubTasks": 2, "totalCompleteTasks": 2 }
+                        //alert("RESPONSE: " + res);
+
+                        var obj = JSON.parse(res);
+
+                        totalSubTasks = obj.totalSubTasks;
+                        totalCompleteTasks = obj.totalCompleteTasks;
+                        //alert("totalST : " + totalSubTasks + " totalIT : " + totalCompleteTasks)
+                        // set the progress bar to the correct amount
+                        progressBar.style.width = (((totalCompleteTasks / totalSubTasks) * 100) + "%");
+                        //alert("IF : " + ((totalCompleteTasks / totalSubTasks) * 100) + "%");
+                        progressBar.innerHTML = ((totalCompleteTasks / totalSubTasks) * 100) + "%";
+
+                        // if for any reason the number cannot be calculated, mainly due to no subtasks being made, set the progress bar to 0.
+                        if (isNaN(((totalCompleteTasks / totalSubTasks) * 100))) {
+                            progressBar.style.width = 0;
+                            progressBar.innerHTML = "0";
+                        }
+
+                        //set the tasks status
+                        taskStatus = obj.taskStatus;
+
+                        //check the status of the task
+                        if (taskStatus == "complete") {
+                            // set the values required for the complete status
+                            progressBar.style.width = "100%";
+                            progressBar.innerHTML = "100%";
+                            $(progressBar).addClass("bg-success");
+
+                        } else {
+                            $(progressBar).removeClass("bg-success");
+
+                        }
+
+                    } else {
+
+                    }
+                },
+                failure: function (response) {
+
+                },
+                error: function (response) {
+
+                }
+            });
+
+
+        }
+
+        //
 
 
         //enable popovers on the page:
@@ -511,15 +759,7 @@
             $('[data-toggle="popover"]').popover()
         })
 
-        /*
-        $(".rotate-accordion-arrow").click(function () {
-            $(this).toggleClass("down");
-        })
-
-        $(".rotate-accordion-link").click(function () {
-            $(".rotate-accordion-arrow").toggleClass("down");
-        })
-        */
+       
     </script>
 } 
 

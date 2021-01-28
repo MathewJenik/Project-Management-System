@@ -198,7 +198,7 @@ namespace Project_Management_System.Controllers
         // POST: ProjectsController/UpdateProjTaskStatus/name
         [HttpPost]
         
-        public JsonResult UpdateProjTaskStatus(string name, string status, int projectId)
+        public JsonResult UpdateProjTaskStatus(int id, string status, int projectId)
         {
 
             var statuses = _context.taskStatuses;
@@ -207,7 +207,7 @@ namespace Project_Management_System.Controllers
 
             var stat = statuses.First(s => s.Name.ToLower() == status.ToLower());
 
-            project.First().Tasks.First(t => t.Name == name).Status = stat;
+            project.First().Tasks.First(t => t.ID == id).Status = stat;
             _context.SaveChanges();
            
             return Json("Suceeded");
@@ -266,7 +266,7 @@ namespace Project_Management_System.Controllers
 
 
         //Create SubTask API Call
-        [HttpPost]
+        [HttpGet]
         public JsonResult ApiCreateSubTask(int taskID, string name, string description)
         {
 
@@ -276,7 +276,7 @@ namespace Project_Management_System.Controllers
             subTask.Description = description;
             subTask.Status = _context.taskStatuses.First(s => s.Name == "Incomplete");
 
-            
+
             var project = _context.projects.Where(p => p.Tasks.First(t => t.ID == taskID).ID == taskID).Include(pt => pt.Tasks).ThenInclude(pt => pt.SubTasks);
             //Add the newly created projTask to the database
             _context.subTasks.Add(subTask);
@@ -286,10 +286,63 @@ namespace Project_Management_System.Controllers
 
             _context.SaveChanges();
 
-            return Json("Suceeded");
+            var data = new
+            {
+                stID = subTask.ID
+            };
+
+
+            return Json(data);
 
         }
 
 
+
+        //Create SubTask API Call
+        [HttpPost]
+        public JsonResult ApiChangeSubTaskStatus(int subTaskID, bool completed)
+        {
+            var subTask = _context.subTasks.First(st => st.ID == subTaskID);
+            if (completed == true)
+            {
+                subTask.Status = _context.taskStatuses.First(ts => ts.Name == "Complete");
+            }
+            else {
+                subTask.Status = _context.taskStatuses.First(ts => ts.Name == "Incomplete");
+            }
+            _context.SaveChanges();
+
+
+            return Json("Suceeded");
+        }
+
+
+        //get the progress details of a task and the subtasks
+        [HttpGet]
+        public JsonResult ApiGetSubTaskProgressDetails(int taskID) {
+
+            var task = _context.projTasks.Where(st => st.ID == taskID).Include(st => st.SubTasks).ThenInclude(st => st.Status).Include(st => st.Status).First();
+
+            var data = new
+            {
+                totalSubTasks = task.SubTasks.Count(),
+                totalCompleteTasks = task.SubTasks.Where(st => st.Status.Name == "Complete").Count(),
+                taskStatus = task.Status.Name.ToLower()
+            };
+            
+
+
+            return Json(data);
+        }
+
+
+        // get a subtasks status 
+        [HttpGet]
+        public JsonResult ApiGetSubTaskStatus(int subTaskID) {
+            var subTask = _context.subTasks.Where(st => st.ID == subTaskID).Include(st => st.Status).First();
+
+            var status = subTask.Status;
+            return Json(status);
+        }
     }
 }

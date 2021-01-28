@@ -18,3 +18,29 @@ add the ability to have multiple user accounts being able to view a project, as 
 //
 
 Implement the ability to create a new sub task for a task
+
+
+
+// 
+
+to load in the new task after subtask creation
+
+i need to just add the new subtask by using innerHTML style stuff with +=
+and i need to call the onloadprogress function that handles the initial loading of a task.
+
+//
+
+when a task is moved from incomplete or on progress, to complete. the progress bar should turn green on move and it should be set to 100%
+
+
+//
+
+fix bug rearding the name being used to change the status, not the id
+
+// 
+
+get status from inside:
+onLoadSetProgress()
+inside the api
+once the info has been grabbed, check the status and act accordingly.
+if it has been loaded inside a complete one set it to compelte state, else do normal stuff.
