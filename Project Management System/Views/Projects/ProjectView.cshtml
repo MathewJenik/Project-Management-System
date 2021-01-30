@@ -73,26 +73,29 @@
                                                         @{
                                                             if (p.SubTasks.Count == 0)
                                                             {
-                                                                <text>No Sub Tasks.</text>
+                                                                //<text>No Sub Tasks.</text>
                                                             }
                                                             else
                                                             {
-                                                                <text><div></div></text>
+                                                                
                                                                 foreach (var st in p.SubTasks)
                                                                 {
-                                                                    <hr />
-
                                                                     var checkboxStatus = true; if (st.Status.Name == "Incomplete") { checkboxStatus = false; }
-                                                                    <Text>
-                                                                    <p class="subtask">
-                                                                        Completed: <input id="subTaskCompleteInput_@st.ID" type="checkbox" onclick="changeSubTaskCompleted(@st.ID, @p.ID)" checked="@checkboxStatus" />
-                                                                        <i id="subTaskInfoIcon_@st.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@st.Description" data-trigger="hover" data-placement="top"></i>
+                                                                    <div id="projSubTask_@st.ID">
+                                                                        <hr />
 
-                                                                        @st.Name
+                                                                        <Text>
+                                                                            <p class="subtask">
+                                                                                <i id="subTaskDeleteIcon_@st.ID" class="fa fa-trash nospacing blue-icon" onclick="subTaskLoadDelete(@st.ID, @p.ID)"></i>
+                                                                                Completed: <input id="subTaskCompleteInput_@st.ID" type="checkbox" onclick="changeSubTaskCompleted(@st.ID, @p.ID)" checked="@checkboxStatus" />
+                                                                                <i id="subTaskInfoIcon_@st.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@st.Description" data-trigger="hover" data-placement="top"></i>
 
-                                                                    </p>
-                                                                    </Text>
+                                                                                @st.Name
 
+                                                                            </p>
+                                                                        </Text>
+                                                                    </div>
+                                                                    
                                                                 }
 
                                                             }
@@ -199,25 +202,28 @@
                                                 @{
                                                     if (p.SubTasks.Count == 0)
                                                     {
-                                                        <text>No Sub Tasks.</text>
+                                                        //<text>No Sub Tasks.</text>
                                                     }
                                                     else
                                                     {
-                                                        <text><div></div></text>
+
                                                         foreach (var st in p.SubTasks)
                                                         {
-                                                            <hr />
-
                                                             var checkboxStatus = true; if (st.Status.Name == "Incomplete") { checkboxStatus = false; }
-                                                            <Text>
-                                                            <p class="subtask">
-                                                                Completed: <input id="subTaskCompleteInput_@st.ID" type="checkbox" onclick="changeSubTaskCompleted(@st.ID, @p.ID)" checked="@checkboxStatus" />
-                                                                <i id="subTaskInfoIcon_@st.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@st.Description" data-trigger="hover" data-placement="top"></i>
+                                                            <div id="projSubTask_@st.ID">
+                                                                <hr />
 
-                                                                @st.Name
+                                                                <Text>
+                                                                    <p class="subtask">
+                                                                        <i id="subTaskDeleteIcon_@st.ID" class="fa fa-trash nospacing blue-icon" onclick="subTaskLoadDelete(@st.ID, @p.ID)"></i>
+                                                                        Completed: <input id="subTaskCompleteInput_@st.ID" type="checkbox" onclick="changeSubTaskCompleted(@st.ID, @p.ID)" checked="@checkboxStatus" />
+                                                                        <i id="subTaskInfoIcon_@st.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@st.Description" data-trigger="hover" data-placement="top"></i>
 
-                                                            </p>
-                                                            </Text>
+                                                                        @st.Name
+
+                                                                    </p>
+                                                                </Text>
+                                                            </div>
 
                                                         }
 
@@ -322,25 +328,28 @@
                                                 @{
                                                     if (p.SubTasks.Count == 0)
                                                     {
-                                                        <text>No Sub Tasks.</text>
+                                                        //<text>No Sub Tasks.</text>
                                                     }
                                                     else
                                                     {
-                                                        <text><div></div></text>
+
                                                         foreach (var st in p.SubTasks)
                                                         {
-                                                            <hr />
-
                                                             var checkboxStatus = true; if (st.Status.Name == "Incomplete") { checkboxStatus = false; }
-                                                            <Text>
-                                                            <p class="subtask">
-                                                                Completed: <input id="subTaskCompleteInput_@st.ID" type="checkbox" onclick="changeSubTaskCompleted(@st.ID, @p.ID)" checked="@checkboxStatus" />
-                                                                <i id="subTaskInfoIcon_@st.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@st.Description" data-trigger="hover" data-placement="top"></i>
+                                                            <div id="projSubTask_@st.ID">
+                                                                <hr />
 
-                                                                @st.Name
+                                                                <Text>
+                                                                    <p class="subtask">
+                                                                        <i id="subTaskDeleteIcon_@st.ID" class="fa fa-trash nospacing blue-icon" onclick="subTaskLoadDelete(@st.ID, @p.ID)"></i>
+                                                                        Completed: <input id="subTaskCompleteInput_@st.ID" type="checkbox" onclick="changeSubTaskCompleted(@st.ID, @p.ID)" checked="@checkboxStatus" />
+                                                                        <i id="subTaskInfoIcon_@st.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@st.Description" data-trigger="hover" data-placement="top"></i>
 
-                                                            </p>
-                                                            </Text>
+                                                                        @st.Name
+
+                                                                    </p>
+                                                                </Text>
+                                                            </div>
 
                                                         }
 
@@ -446,7 +455,7 @@
                         type: "POST",
                         url: "/Projects/UpdateProjTaskStatus/test",
                         data: { id: ui.item.attr('plid'), status: status, projectId: @Model.ID},
-                        
+
                         success: function (response) {
                             if (response != null) {
 
@@ -462,14 +471,14 @@
                                     onLoadSetProgress(ui.item.attr('id'));
                                 }
                             } else {
-                                
+
                             }
                         },
                         failure: function (response) {
-                            
+
                         },
                         error: function (response) {
-                            
+
                         }
                     });
 
@@ -494,7 +503,7 @@
             })
 
         }
-        
+
         //function to delete the selected task
         function loadDelete(id, name) {
 
@@ -513,18 +522,18 @@
                         // remove the child from the list.
                         var li = document.getElementById(name);
                         document.getElementById(name).parentNode.removeChild(li);
-                        
+
                         if (response != null) {
-                           
+
                         } else {
-                           
+
                         }
                     },
                     failure: function (response) {
-                        
+
                     },
                     error: function (response) {
-                        
+
                     }
                 });
 
@@ -534,6 +543,9 @@
             }
 
         }
+
+
+
 
         // function to create a mew subtask.
         function createNewSubTask(ID) {
@@ -551,14 +563,16 @@
 
                 success: function (response) {
                     if (response != null) {
-                        
+
                         var res = JSON.stringify(response);
                         var obj = JSON.parse(res);
                         var task = document.getElementById("subTaskContainer_" + ID);
 
                         // adding the required html to the list.
-                        task.innerHTML += "<hr/><p class='subtask'> Completed: <input id='subTaskCompleteInput_" + obj.stID + "' type='checkbox' onclick='changeSubTaskCompleted(" + obj.stID + "," + ID + ")' /> " + " " + " <i id='subTaskInfoIcon_" + obj.stID + "' class='fa fa-info-circle nospacing blue-icon circle-icon' data-toggle='popover' data-original-title='Description' data-content='" + Description + "' data-trigger='hover' data-placement='top'></i>" + " " + Name + " " + "</p>";
-                        
+                        task.innerHTML += "<div id='projSubTask_"+obj.stID+"'><hr/><p class='subtask'> <i id='subTaskDeleteIcon_"+obj.stID+"' class='fa fa-trash nospacing blue-icon' onclick='subTaskLoadDelete("+obj.stID+","+ ID+")'></i> Completed: <input id='subTaskCompleteInput_" + obj.stID + "' type='checkbox' onclick='changeSubTaskCompleted(" + obj.stID + "," + ID + ")' /> " + " " + " <i id='subTaskInfoIcon_" + obj.stID + "' class='fa fa-info-circle nospacing blue-icon circle-icon' data-toggle='popover' data-original-title='Description' data-content='" + Description + "' data-trigger='hover' data-placement='top'></i>" + " " + Name + " " + "</p></div>";
+                        //var checkbox = task.getElementByID("subTaskCompleteInput_" + obj.stID);
+                        //checkbox.checked
+
                         // enabling the newly added popover.
                         $(function () {
                             $('[data-toggle="popover"]').popover()
@@ -587,12 +601,57 @@
 
         }
 
+
+
+        // function delete subtask
+        function subTaskLoadDelete(subTaskID, taskID) {
+            var name = "projSubTask_" + subTaskID;
+
+            //confirmation message to make sure user wants to make this change.
+            if (confirm('Are you sure you want to delete this Sub Task?')) {
+
+                // ajax call to delete the item from the db
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Projects/APIDeleteSubTask",
+                    data: { subTaskID: subTaskID },
+
+                    success: function (response) {
+                        // remove the subtask from the project task.
+                        var element = document.getElementById(name);
+                        element.innerHTML = "";
+
+                        // reload the progress bar
+
+                        onLoadSetProgress(taskID);
+                        if (response != null) {
+
+                        } else {
+
+                        }
+                    },
+                    failure: function (response) {
+
+                    },
+                    error: function (response) {
+
+                    }
+                });
+
+            } else {
+
+
+            }
+        }
+
+
         // change subtask complete
         function changeSubTaskCompleted(SubTaskID, TaskID) {
             // get the sub task
             var st = document.getElementById("subTaskCompleteInput_" + SubTaskID);
             // get the tasks progress bar and empty the text
-            var progressBar = document.getElementById("taskProgressBar_" + TaskID)
+            var progressBar = document.getElementById("taskProgressBar_" + TaskID);
             //progressBar.innerHTML = "";
 
             var completed = st.checked;
@@ -662,7 +721,7 @@
 
         }
 
-        // function to 
+        // function to
         function setProgressComplete(TaskID, removeClass) {
             // jquery to turn the progress bar green, to the success state.
 
@@ -677,7 +736,7 @@
             } else {
                 $(document.getElementById("taskProgressBar_" + TaskID)).removeClass("bg-success");
             }
-            
+
         }
 
         // function to set the progress of each task on load, or when required.
@@ -685,7 +744,7 @@
 
             // get the tasks progress bar and empty the text
             var progressBar = document.getElementById("taskProgressBar_" + TaskID)
-            
+
 
             // api call to get the required details and assign them to there respective variables.
 
@@ -759,7 +818,7 @@
             $('[data-toggle="popover"]').popover()
         })
 
-       
+
     </script>
 } 
 

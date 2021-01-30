@@ -344,5 +344,20 @@ namespace Project_Management_System.Controllers
             var status = subTask.Status;
             return Json(status);
         }
+
+
+
+        // delete a subtask from the projectTask
+        //"/Projects/DeleteProjTask"
+        [HttpPost]
+        public JsonResult APIDeleteSubTask(int subTaskID)
+        {
+            var subTask = _context.subTasks.First(st => st.ID == subTaskID);
+
+            _context.subTasks.Remove(subTask);
+            _context.SaveChanges();
+            return Json("Suceeded");
+        }
+
     }
 }
