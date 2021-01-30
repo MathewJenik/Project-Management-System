@@ -247,3 +247,12 @@ body {
     text-align: center;
 
 }
+
+
+
+.center-button {
+    display: grid;
+    margin:auto;
+    margin-top: 5%;
+    
+}
