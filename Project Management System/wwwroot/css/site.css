@@ -89,11 +89,13 @@ body {
 }
 
 .project li{
-    width: calc(33.33333% - 2em);
+    width: calc(33.33333% - 3.3em);
     margin-left: 2em;
     margin-top: 3em;
     padding: 0;
     background-color: #eeeeee;
+    border: groove 3px grey;
+    border-radius: 20px;
     
 }
 

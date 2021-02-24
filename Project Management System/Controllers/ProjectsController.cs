@@ -359,5 +359,26 @@ namespace Project_Management_System.Controllers
             return Json("Suceeded");
         }
 
+
+
+        // create a new task and save it to the database
+        // "Projects/APICreateNewTask"
+        [HttpPost]
+        public JsonResult ApiCreateNewTask(string name, string description, int projectId)
+        {
+            //create the new task object
+            var task = new Data.ProjTask();
+
+            // fill it with all the needed information
+            task.Name = name;
+            task.Description = description;
+            task.Status = _context.taskStatuses.ToList().Where(s => s.Name == "Incomplete").First();
+            _context.projects.Where(p => p.ID == projectId).First().Tasks.Add(task);
+            // add and save the task to the database
+            _context.projTasks.Add(task);
+            _context.SaveChanges();
+
+            return Json("Suceeded");
+        }
     }
 }

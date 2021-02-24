@@ -3,15 +3,13 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
 @{
 
     if (User.IsInRole("User"))
     {
         <a asp-action="Create">Create a new project</a>
 
-        <h1>Projects</h1>
+        <h1 style="text-align:center">Projects</h1>
         <ul class="projectList">
             @foreach (var p in Model)
             {
@@ -19,7 +17,7 @@
                     <li>
                         <a href="Projects/projectView/@p.ID">
                             <div>
-                                <h5>Project: @p.Name</h5>
+                                <h5>@p.Name</h5>
                                 <p>@p.Description</p>
                                 <p>Remaining Tasks: @p.Tasks.Where(t => t.Status.Name != "Complete").Count() /  @p.Tasks.Count()</p>
                             </div>

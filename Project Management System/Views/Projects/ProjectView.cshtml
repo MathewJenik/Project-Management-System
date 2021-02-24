@@ -16,135 +16,135 @@
         if (Model.Tasks.Count > 0)
         {
             <div class="projectTaskBoard row">
-                
-                    <div class="col">
-                        <h4>Incomplete</h4>
-                        <ul id="incompleteTaskList" class="connectedSortable projectTaskList">
 
-                            @foreach (var p in Model.Tasks.Where(t => t.Status.Name == "Incomplete"))
-                            {
+                <div class="col">
+                    <h4>Incomplete</h4>
+                    <ul id="incompleteTaskList" class="connectedSortable projectTaskList">
 
-
-
-                                <li plid="@p.ID" id="@p.ID" class="projectTaskLI">
-
-
-                                    <div class="accordion md-accordion" role="tablist" aria-multiselectable="true" id="accordion_@p.ID">
-                                        <div class="card">
-                                            <div class="card-header" id="heading_@p.ID" role="tab">
-                                                
-                                                    <a data-toggle="collapse" href="#collapse_@p.ID" aria-expanded="true"
-                                                       aria-controls="collapse_@p.ID" onclick="rotateAccordionIconByElement('accIcon_@p.ID'),onLoadSetProgress(@p.ID)">
-                                                        <h5 class="mb-0">
-
-                                                            <i id="infoIcon_@p.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@p.Description" data-trigger="hover" data-placement="top"></i>
-
-                                                            @p.Name <i id="accIcon_@p.ID" class="fa fa-angle-down rotate-accordion-arrow"></i>
-
-
-                                                        </h5>
-
-
-                                                    </a>
-
-
-                                                <div class="linebreak-hr"></div>
-                                                <div class="taskIcons">
-
-                                                    <a onclick="loadDelete(@p.ID, '@p.Name')">
-                                                        <i id="deleteIcon_@p.ID" class="fa fa-trash nospacing blue-icon float-right"></i>
-                                                    </a>
-
-
-                                                    <a>
-                                                        <i id="moveIcon_@p.ID" class="fa fa-arrows-alt nospacing blue-icon rotate-45"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-
-                                            <div id="collapse_@p.ID" class="collapse" aria-labelledby="heading_@p.ID" data-parent="#accordion_@p.ID">
-                                                <div class="card-body">
-
-                                                    <p class="tinyText">Progress:</p>
-                                                    <div class="progress">
-                                                        <div id="taskProgressBar_@p.ID" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
-                                                    </div>
-                                                    <div id="subTaskContainer_@p.ID">
-                                                        @{
-                                                            if (p.SubTasks.Count == 0)
-                                                            {
-                                                                //<text>No Sub Tasks.</text>
-                                                            }
-                                                            else
-                                                            {
-                                                                
-                                                                foreach (var st in p.SubTasks)
-                                                                {
-                                                                    var checkboxStatus = true; if (st.Status.Name == "Incomplete") { checkboxStatus = false; }
-                                                                    <div id="projSubTask_@st.ID">
-                                                                        <hr />
-
-                                                                        <Text>
-                                                                            <p class="subtask">
-                                                                                <i id="subTaskDeleteIcon_@st.ID" class="fa fa-trash nospacing blue-icon" onclick="subTaskLoadDelete(@st.ID, @p.ID)"></i>
-                                                                                Completed: <input id="subTaskCompleteInput_@st.ID" type="checkbox" onclick="changeSubTaskCompleted(@st.ID, @p.ID)" checked="@checkboxStatus" />
-                                                                                <i id="subTaskInfoIcon_@st.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@st.Description" data-trigger="hover" data-placement="top"></i>
-
-                                                                                @st.Name
-
-                                                                            </p>
-                                                                        </Text>
-                                                                    </div>
-                                                                    
-                                                                }
-
-                                                            }
-                                                        }
-                                                    </div>
-                                                    <button type="button" class="btn btn-light center-button" data-toggle="modal" data-target="#newSubTaskModal_@p.ID">Create a New Sub Task</button>
-
-                                                    <div class="modal fade" id="newSubTaskModal_@p.ID" tabindex="1" roles="dialog" aria-labelledby="newSubTaskModalTitle_@p.ID" aria-hidden="true">
-                                                        <div class="modal-dialog" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="newSubTaskModalTitle_@p.ID"> Create A New Sub Task? </h5>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                                <div class="modal-body">
-
-                                                                    <p>Name: <input type="text" id="subTaskCreateName_@p.ID" /></p>
-                                                                    <p>Description: <input type="text" id="subTaskCreateDescription_@p.ID" /></p>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                                    <button type="button" class="btn btn-primary" onclick="createNewSubTask(@p.ID)" data-dismiss="modal">Create</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                        @foreach (var p in Model.Tasks.Where(t => t.Status.Name == "Incomplete"))
+                        {
 
 
 
-                                                </div>
+                            <li plid="@p.ID" id="@p.ID" class="projectTaskLI">
+
+
+                                <div class="accordion md-accordion" role="tablist" aria-multiselectable="true" id="accordion_@p.ID">
+                                    <div class="card">
+                                        <div class="card-header" id="heading_@p.ID" role="tab">
+
+                                            <a data-toggle="collapse" href="#collapse_@p.ID" aria-expanded="true"
+                                               aria-controls="collapse_@p.ID" onclick="rotateAccordionIconByElement('accIcon_@p.ID'),onLoadSetProgress(@p.ID)">
+                                                <h5 class="mb-0">
+
+                                                    <i id="infoIcon_@p.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@p.Description" data-trigger="hover" data-placement="top"></i>
+
+                                                    @p.Name <i id="accIcon_@p.ID" class="fa fa-angle-down rotate-accordion-arrow"></i>
+
+
+                                                </h5>
+
+
+                                            </a>
+
+
+                                            <div class="linebreak-hr"></div>
+                                            <div class="taskIcons">
+
+                                                <a onclick="loadDelete(@p.ID, '@p.Name')">
+                                                    <i id="deleteIcon_@p.ID" class="fa fa-trash nospacing blue-icon float-right"></i>
+                                                </a>
+
+
+                                                <a>
+                                                    <i id="moveIcon_@p.ID" class="fa fa-arrows-alt nospacing blue-icon rotate-45"></i>
+                                                </a>
                                             </div>
                                         </div>
 
+                                        <div id="collapse_@p.ID" class="collapse" aria-labelledby="heading_@p.ID" data-parent="#accordion_@p.ID">
+                                            <div class="card-body">
+
+                                                <p class="tinyText">Progress:</p>
+                                                <div class="progress">
+                                                    <div id="taskProgressBar_@p.ID" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                                                </div>
+                                                <div id="subTaskContainer_@p.ID">
+                                                    @{
+                                                        if (p.SubTasks.Count == 0)
+                                                        {
+                                                            //<text>No Sub Tasks.</text>
+                                                        }
+                                                        else
+                                                        {
+
+                                                            foreach (var st in p.SubTasks)
+                                                            {
+                                                                var checkboxStatus = true; if (st.Status.Name == "Incomplete") { checkboxStatus = false; }
+                                                                <div id="projSubTask_@st.ID">
+                                                                    <hr />
+
+                                                                    <Text>
+                                                                        <p class="subtask">
+                                                                            <i id="subTaskDeleteIcon_@st.ID" class="fa fa-trash nospacing blue-icon" onclick="subTaskLoadDelete(@st.ID, @p.ID)"></i>
+                                                                            Completed: <input id="subTaskCompleteInput_@st.ID" type="checkbox" onclick="changeSubTaskCompleted(@st.ID, @p.ID)" checked="@checkboxStatus" />
+                                                                            <i id="subTaskInfoIcon_@st.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@st.Description" data-trigger="hover" data-placement="top"></i>
+
+                                                                            @st.Name
+
+                                                                        </p>
+                                                                    </Text>
+                                                                </div>
+
+                                                            }
+
+                                                        }
+                                                    }
+                                                </div>
+                                                <button type="button" class="btn btn-light center-button" data-toggle="modal" data-target="#newSubTaskModal_@p.ID">Create a New Sub Task</button>
+
+                                                <div class="modal fade" id="newSubTaskModal_@p.ID" tabindex="1" roles="dialog" aria-labelledby="newSubTaskModalTitle_@p.ID" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="newSubTaskModalTitle_@p.ID"> Create A New Sub Task? </h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+
+                                                                <p>Name: <input type="text" id="subTaskCreateName_@p.ID" /></p>
+                                                                <p>Description: <input type="text" id="subTaskCreateDescription_@p.ID" /></p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                                <button type="button" class="btn btn-primary" onclick="createNewSubTask(@p.ID)" data-dismiss="modal">Create</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
+                                            </div>
+                                        </div>
                                     </div>
 
+                                </div>
 
 
-                                </li>
+
+                            </li>
 
 
-                            }
+                        }
 
-                        </ul>
-                        
-                        
-                        
-                    </div>
+                    </ul>
+
+
+
+                </div>
 
                 <div class="col">
                     <h4>In-Progress</h4>
@@ -158,113 +158,113 @@
                             <li plid="@p.ID" id="@p.ID" class="projectTaskLI">
 
 
-                            <div class="accordion md-accordion" role="tablist" aria-multiselectable="true" id="accordion_@p.ID">
-                                <div class="card">
-                                    <div class="card-header" id="heading_@p.ID" role="tab">
+                                <div class="accordion md-accordion" role="tablist" aria-multiselectable="true" id="accordion_@p.ID">
+                                    <div class="card">
+                                        <div class="card-header" id="heading_@p.ID" role="tab">
 
-                                        <a data-toggle="collapse" href="#collapse_@p.ID" aria-expanded="true"
-                                           aria-controls="collapse_@p.ID" onclick="rotateAccordionIconByElement('accIcon_@p.ID'),onLoadSetProgress(@p.ID)">
-                                            <h5 class="mb-0">
+                                            <a data-toggle="collapse" href="#collapse_@p.ID" aria-expanded="true"
+                                               aria-controls="collapse_@p.ID" onclick="rotateAccordionIconByElement('accIcon_@p.ID'),onLoadSetProgress(@p.ID)">
+                                                <h5 class="mb-0">
 
-                                                <i id="infoIcon_@p.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@p.Description" data-trigger="hover" data-placement="top"></i>
+                                                    <i id="infoIcon_@p.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@p.Description" data-trigger="hover" data-placement="top"></i>
 
-                                                @p.Name <i id="accIcon_@p.ID" class="fa fa-angle-down rotate-accordion-arrow"></i>
-
-
-                                            </h5>
+                                                    @p.Name <i id="accIcon_@p.ID" class="fa fa-angle-down rotate-accordion-arrow"></i>
 
 
-                                        </a>
+                                                </h5>
 
 
-                                        <div class="linebreak-hr"></div>
-                                        <div class="taskIcons">
-
-                                            <a onclick="loadDelete(@p.ID, '@p.Name')">
-                                                <i id="deleteIcon_@p.ID" class="fa fa-trash nospacing blue-icon float-right"></i>
                                             </a>
 
 
-                                            <a>
-                                                <i id="moveIcon_@p.ID" class="fa fa-arrows-alt nospacing blue-icon rotate-45"></i>
-                                            </a>
-                                        </div>
-                                    </div>
+                                            <div class="linebreak-hr"></div>
+                                            <div class="taskIcons">
 
-                                    <div id="collapse_@p.ID" class="collapse" aria-labelledby="heading_@p.ID" data-parent="#accordion_@p.ID">
-                                        <div class="card-body">
+                                                <a onclick="loadDelete(@p.ID, '@p.Name')">
+                                                    <i id="deleteIcon_@p.ID" class="fa fa-trash nospacing blue-icon float-right"></i>
+                                                </a>
 
-                                            <p class="tinyText">Progress:</p>
-                                            <div class="progress">
-                                                <div id="taskProgressBar_@p.ID" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+
+                                                <a>
+                                                    <i id="moveIcon_@p.ID" class="fa fa-arrows-alt nospacing blue-icon rotate-45"></i>
+                                                </a>
                                             </div>
-                                            <div id="subTaskContainer_@p.ID">
-                                                @{
-                                                    if (p.SubTasks.Count == 0)
-                                                    {
-                                                        //<text>No Sub Tasks.</text>
-                                                    }
-                                                    else
-                                                    {
+                                        </div>
 
-                                                        foreach (var st in p.SubTasks)
+                                        <div id="collapse_@p.ID" class="collapse" aria-labelledby="heading_@p.ID" data-parent="#accordion_@p.ID">
+                                            <div class="card-body">
+
+                                                <p class="tinyText">Progress:</p>
+                                                <div class="progress">
+                                                    <div id="taskProgressBar_@p.ID" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                                                </div>
+                                                <div id="subTaskContainer_@p.ID">
+                                                    @{
+                                                        if (p.SubTasks.Count == 0)
                                                         {
-                                                            var checkboxStatus = true; if (st.Status.Name == "Incomplete") { checkboxStatus = false; }
-                                                            <div id="projSubTask_@st.ID">
-                                                                <hr />
+                                                            //<text>No Sub Tasks.</text>
+                                                        }
+                                                        else
+                                                        {
 
-                                                                <Text>
-                                                                    <p class="subtask">
-                                                                        <i id="subTaskDeleteIcon_@st.ID" class="fa fa-trash nospacing blue-icon" onclick="subTaskLoadDelete(@st.ID, @p.ID)"></i>
-                                                                        Completed: <input id="subTaskCompleteInput_@st.ID" type="checkbox" onclick="changeSubTaskCompleted(@st.ID, @p.ID)" checked="@checkboxStatus" />
-                                                                        <i id="subTaskInfoIcon_@st.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@st.Description" data-trigger="hover" data-placement="top"></i>
+                                                            foreach (var st in p.SubTasks)
+                                                            {
+                                                                var checkboxStatus = true; if (st.Status.Name == "Incomplete") { checkboxStatus = false; }
+                                                                <div id="projSubTask_@st.ID">
+                                                                    <hr />
 
-                                                                        @st.Name
+                                                                    <Text>
+                                                                        <p class="subtask">
+                                                                            <i id="subTaskDeleteIcon_@st.ID" class="fa fa-trash nospacing blue-icon" onclick="subTaskLoadDelete(@st.ID, @p.ID)"></i>
+                                                                            Completed: <input id="subTaskCompleteInput_@st.ID" type="checkbox" onclick="changeSubTaskCompleted(@st.ID, @p.ID)" checked="@checkboxStatus" />
+                                                                            <i id="subTaskInfoIcon_@st.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@st.Description" data-trigger="hover" data-placement="top"></i>
 
-                                                                    </p>
-                                                                </Text>
-                                                            </div>
+                                                                            @st.Name
+
+                                                                        </p>
+                                                                    </Text>
+                                                                </div>
+
+                                                            }
 
                                                         }
-
                                                     }
-                                                }
-                                            </div>
-                                            <button type="button" class="btn btn-light center-button" data-toggle="modal" data-target="#newSubTaskModal_@p.ID">Create a New Sub Task</button>
+                                                </div>
+                                                <button type="button" class="btn btn-light center-button" data-toggle="modal" data-target="#newSubTaskModal_@p.ID">Create a New Sub Task</button>
 
-                                            <div class="modal fade" id="newSubTaskModal_@p.ID" tabindex="1" roles="dialog" aria-labelledby="newSubTaskModalTitle_@p.ID" aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="newSubTaskModalTitle_@p.ID"> Create A New Sub Task? </h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
+                                                <div class="modal fade" id="newSubTaskModal_@p.ID" tabindex="1" roles="dialog" aria-labelledby="newSubTaskModalTitle_@p.ID" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="newSubTaskModalTitle_@p.ID"> Create A New Sub Task? </h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
 
-                                                            <p>Name: <input type="text" id="subTaskCreateName_@p.ID" /></p>
-                                                            <p>Description: <input type="text" id="subTaskCreateDescription_@p.ID" /></p>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                            <button type="button" class="btn btn-primary" onclick="createNewSubTask(@p.ID)" data-dismiss="modal">Create</button>
+                                                                <p>Name: <input type="text" id="subTaskCreateName_@p.ID" /></p>
+                                                                <p>Description: <input type="text" id="subTaskCreateDescription_@p.ID" /></p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                                <button type="button" class="btn btn-primary" onclick="createNewSubTask(@p.ID)" data-dismiss="modal">Create</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
+
+
+
                                             </div>
-
-
-
                                         </div>
                                     </div>
+
                                 </div>
 
-                            </div>
 
 
-
-                        </li>
+                            </li>
 
 
                         }
@@ -280,124 +280,124 @@
                         {
 
 
-                        
-                        <li plid="@p.ID" id="@p.ID" class="projectTaskLI">
+
+                            <li plid="@p.ID" id="@p.ID" class="projectTaskLI">
 
 
-                            <div class="accordion md-accordion" role="tablist" aria-multiselectable="true" id="accordion_@p.ID">
-                                <div class="card">
-                                    <div class="card-header" id="heading_@p.ID" role="tab">
+                                <div class="accordion md-accordion" role="tablist" aria-multiselectable="true" id="accordion_@p.ID">
+                                    <div class="card">
+                                        <div class="card-header" id="heading_@p.ID" role="tab">
 
-                                        <a data-toggle="collapse" href="#collapse_@p.ID" aria-expanded="true"
-                                           aria-controls="collapse_@p.ID" onclick="rotateAccordionIconByElement('accIcon_@p.ID'),onLoadSetProgress(@p.ID)">
-                                            <h5 class="mb-0">
+                                            <a data-toggle="collapse" href="#collapse_@p.ID" aria-expanded="true"
+                                               aria-controls="collapse_@p.ID" onclick="rotateAccordionIconByElement('accIcon_@p.ID'),onLoadSetProgress(@p.ID)">
+                                                <h5 class="mb-0">
 
-                                                <i id="infoIcon_@p.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@p.Description" data-trigger="hover" data-placement="top"></i>
+                                                    <i id="infoIcon_@p.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@p.Description" data-trigger="hover" data-placement="top"></i>
 
-                                                @p.Name <i id="accIcon_@p.ID" class="fa fa-angle-down rotate-accordion-arrow"></i>
-
-
-                                            </h5>
+                                                    @p.Name <i id="accIcon_@p.ID" class="fa fa-angle-down rotate-accordion-arrow"></i>
 
 
-                                        </a>
+                                                </h5>
 
 
-                                        <div class="linebreak-hr"></div>
-                                        <div class="taskIcons">
-
-                                            <a onclick="loadDelete(@p.ID, '@p.Name')">
-                                                <i id="deleteIcon_@p.ID" class="fa fa-trash nospacing blue-icon float-right"></i>
                                             </a>
 
 
-                                            <a>
-                                                <i id="moveIcon_@p.ID" class="fa fa-arrows-alt nospacing blue-icon rotate-45"></i>
-                                            </a>
-                                        </div>
-                                    </div>
+                                            <div class="linebreak-hr"></div>
+                                            <div class="taskIcons">
 
-                                    <div id="collapse_@p.ID" class="collapse" aria-labelledby="heading_@p.ID" data-parent="#accordion_@p.ID">
-                                        <div class="card-body">
+                                                <a onclick="loadDelete(@p.ID, '@p.Name')">
+                                                    <i id="deleteIcon_@p.ID" class="fa fa-trash nospacing blue-icon float-right"></i>
+                                                </a>
 
-                                            <p class="tinyText">Progress:</p>
-                                            <div class="progress">
-                                                <div id="taskProgressBar_@p.ID" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100">100%</div>
+
+                                                <a>
+                                                    <i id="moveIcon_@p.ID" class="fa fa-arrows-alt nospacing blue-icon rotate-45"></i>
+                                                </a>
                                             </div>
-                                            <div id="subTaskContainer_@p.ID">
-                                                @{
-                                                    if (p.SubTasks.Count == 0)
-                                                    {
-                                                        //<text>No Sub Tasks.</text>
-                                                    }
-                                                    else
-                                                    {
+                                        </div>
 
-                                                        foreach (var st in p.SubTasks)
+                                        <div id="collapse_@p.ID" class="collapse" aria-labelledby="heading_@p.ID" data-parent="#accordion_@p.ID">
+                                            <div class="card-body">
+
+                                                <p class="tinyText">Progress:</p>
+                                                <div class="progress">
+                                                    <div id="taskProgressBar_@p.ID" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100">100%</div>
+                                                </div>
+                                                <div id="subTaskContainer_@p.ID">
+                                                    @{
+                                                        if (p.SubTasks.Count == 0)
                                                         {
-                                                            var checkboxStatus = true; if (st.Status.Name == "Incomplete") { checkboxStatus = false; }
-                                                            <div id="projSubTask_@st.ID">
-                                                                <hr />
+                                                            //<text>No Sub Tasks.</text>
+                                                        }
+                                                        else
+                                                        {
 
-                                                                <Text>
-                                                                    <p class="subtask">
-                                                                        <i id="subTaskDeleteIcon_@st.ID" class="fa fa-trash nospacing blue-icon" onclick="subTaskLoadDelete(@st.ID, @p.ID)"></i>
-                                                                        Completed: <input id="subTaskCompleteInput_@st.ID" type="checkbox" onclick="changeSubTaskCompleted(@st.ID, @p.ID)" checked="@checkboxStatus" />
-                                                                        <i id="subTaskInfoIcon_@st.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@st.Description" data-trigger="hover" data-placement="top"></i>
+                                                            foreach (var st in p.SubTasks)
+                                                            {
+                                                                var checkboxStatus = true; if (st.Status.Name == "Incomplete") { checkboxStatus = false; }
+                                                                <div id="projSubTask_@st.ID">
+                                                                    <hr />
 
-                                                                        @st.Name
+                                                                    <Text>
+                                                                        <p class="subtask">
+                                                                            <i id="subTaskDeleteIcon_@st.ID" class="fa fa-trash nospacing blue-icon" onclick="subTaskLoadDelete(@st.ID, @p.ID)"></i>
+                                                                            Completed: <input id="subTaskCompleteInput_@st.ID" type="checkbox" onclick="changeSubTaskCompleted(@st.ID, @p.ID)" checked="@checkboxStatus" />
+                                                                            <i id="subTaskInfoIcon_@st.ID" class="fa fa-info-circle nospacing blue-icon circle-icon" data-toggle="popover" title="Description" data-content="@st.Description" data-trigger="hover" data-placement="top"></i>
 
-                                                                    </p>
-                                                                </Text>
-                                                            </div>
+                                                                            @st.Name
+
+                                                                        </p>
+                                                                    </Text>
+                                                                </div>
+
+                                                            }
 
                                                         }
-
                                                     }
-                                                }
-                                            </div>
-                                            <button type="button" class="btn btn-light center-button" data-toggle="modal" data-target="#newSubTaskModal_@p.ID">Create a New Sub Task</button>
+                                                </div>
+                                                <button type="button" class="btn btn-light center-button" data-toggle="modal" data-target="#newSubTaskModal_@p.ID">Create a New Sub Task</button>
 
-                                            <div class="modal fade" id="newSubTaskModal_@p.ID" tabindex="1" roles="dialog" aria-labelledby="newSubTaskModalTitle_@p.ID" aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="newSubTaskModalTitle_@p.ID"> Create A New Sub Task? </h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
+                                                <div class="modal fade" id="newSubTaskModal_@p.ID" tabindex="1" roles="dialog" aria-labelledby="newSubTaskModalTitle_@p.ID" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="newSubTaskModalTitle_@p.ID"> Create A New Sub Task? </h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
 
-                                                            <p>Name: <input type="text" id="subTaskCreateName_@p.ID" /></p>
-                                                            <p>Description: <input type="text" id="subTaskCreateDescription_@p.ID" /></p>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                            <button type="button" class="btn btn-primary" onclick="createNewSubTask(@p.ID)" data-dismiss="modal">Create</button>
+                                                                <p>Name: <input type="text" id="subTaskCreateName_@p.ID" /></p>
+                                                                <p>Description: <input type="text" id="subTaskCreateDescription_@p.ID" /></p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                                <button type="button" class="btn btn-primary" onclick="createNewSubTask(@p.ID)" data-dismiss="modal">Create</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
+
+
+
                                             </div>
-
-
-
                                         </div>
                                     </div>
+
                                 </div>
 
-                            </div>
 
 
-
-                        </li>
+                            </li>
 
                         }
 
                     </ul>
                 </div>
             </div>
-            
+
         }
 
     }
@@ -410,9 +410,36 @@
 
         </div>
         <div class="form-group">
-            <input type="submit" value="Create a new Task" class="btn btn-primary" />
+            <!--<input type="submit" value="Create a new Task" class="btn btn-primary" />-->
+
         </div>
     </form>
+    <div>
+        <button type="button" class="btn btn-light center-button" data-toggle="modal" data-target="#createNewTaskModal">Create a New Task</button>
+
+        <!-- Modal for creating a new task -->
+        <div class="modal fade" id="createNewTaskModal" tabindex="1" roles="dialog" aria-labelledby="createNewTaskModalTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createNewTaskModalTitle"> Create A New Task? </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <p>Name: <input type="text" id="createNewTaskModalName" /></p>
+                        <p>Description: <input type="text" id="createNewTaskModalDescription" /></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" onclick="createNewTask()" data-dismiss="modal">Create</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 </div>
@@ -520,8 +547,8 @@
 
                     success: function (response) {
                         // remove the child from the list.
-                        var li = document.getElementById(name);
-                        document.getElementById(name).parentNode.removeChild(li);
+                        var li = document.getElementById(id);
+                        document.getElementById(id).parentNode.removeChild(li);
 
                         if (response != null) {
 
@@ -545,13 +572,71 @@
         }
 
 
+        // function to create a new task
+        function createNewTask() {
+            var Name = document.getElementById("createNewTaskModalName").value;
+            var Description = document.getElementById("createNewTaskModalDescription").value;
+            var ProjectID = @Model.ID;
+
+            //ajax call to get the required data from the database
 
 
-        // function to create a mew subtask.
+            $.ajax({
+                type: "POST",
+                url: "/Projects/ApiCreateNewTask",
+                data: { name: Name, description: Description, projectID: ProjectID},
+
+                success: function (response) {
+                    if (response != null) {
+                        window.location.reload();
+
+                        /*
+                        var res = JSON.stringify(response);
+                        var obj = JSON.parse(res);
+                        var task = document.getElementById("subTaskContainer_" + ID);
+
+                        // adding the required html to the list.
+                        task.innerHTML += "<div id='projSubTask_" + obj.stID + "'><hr/><p class='subtask'> <i id='subTaskDeleteIcon_" + obj.stID + "' class='fa fa-trash nospacing blue-icon' onclick='subTaskLoadDelete(" + obj.stID + "," + ID + ")'></i> Completed: <input id='subTaskCompleteInput_" + obj.stID + "' type='checkbox' onclick='changeSubTaskCompleted(" + obj.stID + "," + ID + ")' /> " + " " + " <i id='subTaskInfoIcon_" + obj.stID + "' class='fa fa-info-circle nospacing blue-icon circle-icon' data-toggle='popover' data-original-title='Description' data-content='" + Description + "' data-trigger='hover' data-placement='top'></i>" + " " + Name + " " + "</p></div>";
+                        //var checkbox = task.getElementByID("subTaskCompleteInput_" + obj.stID);
+                        //checkbox.checked
+
+                        // enabling the newly added popover.
+                        $(function () {
+                            $('[data-toggle="popover"]').popover()
+                        })
+
+                        //reload the progress bar, to set the new progress since a new subtask has been added.
+                        onLoadSetProgress(ID);
+
+
+                        */
+
+                        
+                    } else {
+                        //alert("Something went wrong");
+                    }
+                },
+                failure: function (response) {
+                    //alert(response.responseText);
+                    //alert("failed");
+                },
+                error: function (response) {
+                    //alert(response.responseText);
+                    // alert("error");
+                }
+            });
+
+
+
+        }
+
+
+
+        // function to create a new subtask.
         function createNewSubTask(ID) {
             var Name = document.getElementById("subTaskCreateName_"+ID).value;
             var Description = document.getElementById("subTaskCreateDescription_" + ID).value;
-            console.log(document.getElementById("subTaskCreateName_" + ID));
+            //console.log(document.getElementById("subTaskCreateName_" + ID));
 
             //ajax call too get the required data and to create the subtask in the database
 
