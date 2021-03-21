@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <UserSecretsId>aspnet-Project_Management_System-8060C02D-AE89-4FFC-8D91-E481A17BFBC5</UserSecretsId>
     <RootNamespace>Project_Management_System</RootNamespace>
   </PropertyGroup>
