@@ -5,11 +5,12 @@
 }
 
 <link rel="stylesheet" href="~/css/jquery-ui/jquery-ui.css">
-
-<h1>ProjectView</h1>
+@{
+    <h1>@Model.Name.ToString()</h1>
+}
 
 <div>
-    <h4>Project</h4>
+    <h4>Project @{Model.Name.ToString();}</h4>
     <hr />
 
     @{
@@ -17,7 +18,7 @@
         {
             <div class="projectTaskBoard row">
 
-                <div class="col">
+                <div class="col PTLContainer">
                     <h4>Incomplete</h4>
                     <ul id="incompleteTaskList" class="connectedSortable projectTaskList">
 
@@ -146,7 +147,7 @@
 
                 </div>
 
-                <div class="col">
+                <div class="col PTLContainer">
                     <h4>In-Progress</h4>
                     <ul id="inProgressTaskList" class="connectedSortable projectTaskList">
 
@@ -202,14 +203,19 @@
                                                     @{
                                                         if (p.SubTasks.Count == 0)
                                                         {
-                                                            //<text>No Sub Tasks.</text>
+                                                        //<text>No Sub Tasks.</text>
                                                         }
                                                         else
                                                         {
 
                                                             foreach (var st in p.SubTasks)
                                                             {
-                                                                var checkboxStatus = true; if (st.Status.Name == "Incomplete") { checkboxStatus = false; }
+                                                                var checkboxStatus = true;
+                                                                if (st.Status == null) { checkboxStatus = false; }
+                                                                else
+                                                                {
+                                                                    if (st.Status.Name == "Incomplete") { checkboxStatus = false; }
+                                                                }
                                                                 <div id="projSubTask_@st.ID">
                                                                     <hr />
 
@@ -272,7 +278,7 @@
                     </ul>
                 </div>
 
-                <div class="col">
+                <div class="col PTLContainer">
                     <h4>Completed</h4>
                     <ul id="completeTaskList" class="connectedSortable projectTaskList">
 
@@ -454,9 +460,9 @@
     <!--<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         -->
-    
+
     <script src="~/lib/jquery-ui/jquery-ui.js"></script>
-    
+
     <script>
         $(function () {
             $("#incompleteTaskList, #inProgressTaskList, #completeTaskList").sortable({
@@ -466,7 +472,7 @@
                     //alert(ui.item.attr('plid'));
                     //db id of the item next to which the dragged item was dropped
                     //alert(ui.item.prev().attr('plid'));
-        ////
+                    ////
                     /*
                     // POST to server using $.post or $.ajax
                     $.post("../../ProjectsController/UpdateProjTaskStatus/",
@@ -584,7 +590,7 @@
             $.ajax({
                 type: "POST",
                 url: "/Projects/ApiCreateNewTask",
-                data: { name: Name, description: Description, projectID: ProjectID},
+                data: { name: Name, description: Description, projectID: ProjectID },
 
                 success: function (response) {
                     if (response != null) {
@@ -611,7 +617,7 @@
 
                         */
 
-                        
+
                     } else {
                         //alert("Something went wrong");
                     }
@@ -634,7 +640,7 @@
 
         // function to create a new subtask.
         function createNewSubTask(ID) {
-            var Name = document.getElementById("subTaskCreateName_"+ID).value;
+            var Name = document.getElementById("subTaskCreateName_" + ID).value;
             var Description = document.getElementById("subTaskCreateDescription_" + ID).value;
             //console.log(document.getElementById("subTaskCreateName_" + ID));
 
@@ -654,7 +660,7 @@
                         var task = document.getElementById("subTaskContainer_" + ID);
 
                         // adding the required html to the list.
-                        task.innerHTML += "<div id='projSubTask_"+obj.stID+"'><hr/><p class='subtask'> <i id='subTaskDeleteIcon_"+obj.stID+"' class='fa fa-trash nospacing blue-icon' onclick='subTaskLoadDelete("+obj.stID+","+ ID+")'></i> Completed: <input id='subTaskCompleteInput_" + obj.stID + "' type='checkbox' onclick='changeSubTaskCompleted(" + obj.stID + "," + ID + ")' /> " + " " + " <i id='subTaskInfoIcon_" + obj.stID + "' class='fa fa-info-circle nospacing blue-icon circle-icon' data-toggle='popover' data-original-title='Description' data-content='" + Description + "' data-trigger='hover' data-placement='top'></i>" + " " + Name + " " + "</p></div>";
+                        task.innerHTML += "<div id='projSubTask_" + obj.stID + "'><hr/><p class='subtask'> <i id='subTaskDeleteIcon_" + obj.stID + "' class='fa fa-trash nospacing blue-icon' onclick='subTaskLoadDelete(" + obj.stID + "," + ID + ")'></i> Completed: <input id='subTaskCompleteInput_" + obj.stID + "' type='checkbox' onclick='changeSubTaskCompleted(" + obj.stID + "," + ID + ")' /> " + " " + " <i id='subTaskInfoIcon_" + obj.stID + "' class='fa fa-info-circle nospacing blue-icon circle-icon' data-toggle='popover' data-original-title='Description' data-content='" + Description + "' data-trigger='hover' data-placement='top'></i>" + " " + Name + " " + "</p></div>";
                         //var checkbox = task.getElementByID("subTaskCompleteInput_" + obj.stID);
                         //checkbox.checked
 
@@ -905,10 +911,4 @@
 
 
     </script>
-} 
-
-
-
-
-
-
+}
