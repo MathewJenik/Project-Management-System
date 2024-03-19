@@ -84,12 +84,12 @@ body {
 
 .projectList {
     list-style-type: none;
-    display: in;
+    display: inline-block;
    
 }
 
 .project li {
-    width: calc(33.33333% - 3.3em);
+    /*width: calc(33.33333% - 3.3em);*/
     margin-left: 2em;
     margin-top: 3em;
     padding: 0;
@@ -102,13 +102,13 @@ body {
 
 .project li {
     float: left;
-    
-    
+    min-width: 20em;
 }
 
 .project {
     float: none;
     text-align: center;
+    display: inline-block;
 }
 
 
@@ -264,4 +264,14 @@ body {
     border-bottom: 0px;
     padding-left: 0px;
     padding-right: 0px;
+}
+
+
+.modal-dialog {
+    max-width: 500px;
+    margin: 25vh auto !important;
+}
+
+.modal-body input, .modal-body textarea {
+    width: 100%;
 }
