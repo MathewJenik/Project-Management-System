@@ -2,7 +2,7 @@
 
 namespace Project_Management_System.Migrations
 {
-    public partial class adddata : Migration
+    public partial class @new : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

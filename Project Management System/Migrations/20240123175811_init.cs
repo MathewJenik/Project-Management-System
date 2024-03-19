@@ -1,10 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Project_Management_System.Migrations
 {
-    public partial class initial : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -48,11 +47,40 @@ namespace Project_Management_System.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "projects",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    UserID = table.Column<string>(nullable: true),
+                    Notes = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_projects", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "taskStatuses",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_taskStatuses", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     RoleId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -73,7 +101,7 @@ namespace Project_Management_System.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -153,6 +181,62 @@ namespace Project_Management_System.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "projTasks",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    StatusID = table.Column<int>(nullable: true),
+                    ProjectID = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_projTasks", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_projTasks_projects_ProjectID",
+                        column: x => x.ProjectID,
+                        principalTable: "projects",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_projTasks_taskStatuses_StatusID",
+                        column: x => x.StatusID,
+                        principalTable: "taskStatuses",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "subTasks",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    StatusID = table.Column<int>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    ProjTaskID = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_subTasks", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_subTasks_projTasks_ProjTaskID",
+                        column: x => x.ProjTaskID,
+                        principalTable: "projTasks",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_subTasks_taskStatuses_StatusID",
+                        column: x => x.StatusID,
+                        principalTable: "taskStatuses",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -162,7 +246,8 @@ namespace Project_Management_System.Migrations
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -188,7 +273,28 @@ namespace Project_Management_System.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_projTasks_ProjectID",
+                table: "projTasks",
+                column: "ProjectID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_projTasks_StatusID",
+                table: "projTasks",
+                column: "StatusID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_subTasks_ProjTaskID",
+                table: "subTasks",
+                column: "ProjTaskID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_subTasks_StatusID",
+                table: "subTasks",
+                column: "StatusID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -209,10 +315,22 @@ namespace Project_Management_System.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "subTasks");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "projTasks");
+
+            migrationBuilder.DropTable(
+                name: "projects");
+
+            migrationBuilder.DropTable(
+                name: "taskStatuses");
         }
     }
 }

@@ -55,7 +55,7 @@ namespace Project_Management_System.Controllers
                 var projectTasks = new List<ProjTask>();
                 try
                 {
-                    var projects = _context.projects.Where(p => p.ID == id).Include(pt => pt.Tasks).ThenInclude(pt => pt.Status).Include(pt => pt.Tasks).ThenInclude(pt => pt.SubTasks).ToList();
+                    var projects = _context.projects.Where(p => p.ID == id).Include(pt => pt.Tasks).ThenInclude(pt => pt.Status).Include(pt => pt.Tasks).ThenInclude(pt => pt.SubTasks).ThenInclude(s => s.Status).ToList();
                     project = projects.First(p => p.ID == id);
                    
                     
