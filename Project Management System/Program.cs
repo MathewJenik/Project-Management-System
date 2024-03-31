@@ -21,6 +21,7 @@ namespace Project_Management_System
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseUrls("http://localhost:44324");
                 });
     }
 }
