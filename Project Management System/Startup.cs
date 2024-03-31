@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,26 +29,42 @@ namespace Project_Management_System
         public void ConfigureServices(IServiceCollection services)
         {
             // connect to SQL Server
+            /*
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            
+            */
+            // sql ends here
 
-            services.AddMvc();
 
             // connect to PostgreSQL server
-            /*
+            
             services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationDbContext>(opt =>
-                opt.UseNpgsql(Configuration.GetConnectionString("PMSDBConection")));
+                opt.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            */
+            
+            // postgres ends here
+
+            services.AddMvc();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+
+            services.Configure<RazorPagesOptions>(options =>
+            {
+                options.Conventions.AuthorizeFolder("/pms/identity");
+                options.Conventions.AddPageRoute("/Account/Login", "/pms/identity/login");
+                options.Conventions.AddPageRoute("/Account/Register", "/pms/identity/register");
+                // Add routes for other Identity pages as needed
+            });
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,16 +91,26 @@ namespace Project_Management_System
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
+            app.UseEndpoints(
+                endpoints => {
+                    endpoints.MapControllerRoute(
+                        name: "default",
+                        pattern: "/pms/{controller=Home}/{action=Index}/{id?}");
+                    endpoints.MapRazorPages();
+                    
+                    
+
+                }
+            );
+            //set the base url if its being hosted on a subdomain path:
+            //place the following code within the Startup.cs files configure function:
+            app.UseStaticFiles(new StaticFileOptions
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapRazorPages();
+                RequestPath = "/pms", // this is the base url path
             });
 
         }
 
-        
+
     }
 }
