@@ -589,7 +589,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/Projects/ApiCreateNewTask",
+                url: "/pms/Projects/ApiCreateNewTask",
                 data: { name: Name, description: Description, projectID: ProjectID },
 
                 success: function (response) {
@@ -649,7 +649,7 @@
 
             $.ajax({
                 type: "GET",
-                url: "/Projects/ApiCreateSubTask",
+                url: "/pms/Projects/ApiCreateSubTask",
                 data: { taskID: ID, name: Name, description: Description },
 
                 success: function (response) {
@@ -750,7 +750,7 @@
             // api call to change the status of the task.
             $.ajax({
                 type: "POST",
-                url: "/Projects/ApiChangeSubTaskStatus",
+                url: "/pms/Projects/ApiChangeSubTaskStatus",
                 data: { subTaskID: SubTaskID, completed: completed },
 
                 success: function (response) {
@@ -763,7 +763,7 @@
 
                         $.ajax({
                             type: "GET",
-                            url: "/Projects/ApiGetSubTaskProgressDetails",
+                            url: "/pms/Projects/ApiGetSubTaskProgressDetails",
                             data: { taskID: TaskID },
 
                             success: function (response) {
@@ -845,7 +845,7 @@
 
             $.ajax({
                 type: "GET",
-                url: "/Projects/ApiGetSubTaskProgressDetails",
+                url: "/pms/Projects/ApiGetSubTaskProgressDetails",
                 data: { taskID: TaskID },
 
                 success: function (response) {
