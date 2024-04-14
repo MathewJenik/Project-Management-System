@@ -41,6 +41,7 @@
             }
         </ul>
 
+
         <button type="button" class="btn btn-light center-button" data-toggle="modal" data-target="#createNewTaskModal">Create a New Task</button>
 
         <div>
@@ -58,18 +59,66 @@
                             <label for="createNewTaskModalName" name="createNewTaskModalName">Name</label>
                             <input type="text" id="createNewTaskModalName" />
                             <br />
-                            <label for="createNewTaskModDesc">Description</label>
-                            <textarea id="CreateNewTaskModalDescription" name="createNewTaskModDesc" rows="4" cols="50">
-                            </textarea>
                             </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn btn-primary" onclick="createNewTask()" data-dismiss="modal">Create</button>
+                            <button type="button" class="btn btn-primary" onclick="createNewProject()" data-dismiss="modal">Create</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        
+    @section scripts {
+    <!--<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        -->
+
+    <script src="/lib/jquery-ui/jquery-ui.js"></script>
+
+    <script>
+
+            // function to create a new task
+            function createNewProject() {
+                var Name = document.getElementById("createNewTaskModalName").value;
+                
+                    //ajax call to get the required data from the database
+
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/pms/Projects/ApiCreateProject",
+                        data: { name: Name},
+
+                        success: function (response) {
+                            if (response != null) {
+                                window.location.reload();
+
+ 
+
+                            } else {
+                                //alert("Something went wrong");
+                            }
+                        },
+                        failure: function (response) {
+                            //alert(response.responseText);
+                            //alert("failed");
+                        },
+                        error: function (response) {
+                            //alert(response.responseText);
+                            // alert("error");
+                        }
+                    });
+
+
+
+                }
+
+
+        </script>
+
+        }
+
     }
     else
     {

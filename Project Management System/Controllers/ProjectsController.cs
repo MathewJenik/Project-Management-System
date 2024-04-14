@@ -211,8 +211,34 @@ namespace Project_Management_System.Controllers
             _context.SaveChanges();
            
             return Json("Suceeded");
-        
+
         }
+
+        // Create Project API Call
+        [HttpPost]
+        public JsonResult ApiCreateProject(string name)
+        {
+
+            var u = _context.Users.First(u => u.Email == User.Identity.Name);
+
+
+            var projectWithMaxId = _context.projects
+                .OrderByDescending(p => p.ID)
+                .FirstOrDefault();
+            
+            Project project = new Project { Name = name, UserID = u.Id,  ID = (projectWithMaxId.ID + 1)};
+
+            _context.projects.Add(project);
+            _context.SaveChanges();
+
+
+            return Json("Suceeded");
+
+        }
+
+
+
+
 
         //Create Task API Call
         [HttpPost]
